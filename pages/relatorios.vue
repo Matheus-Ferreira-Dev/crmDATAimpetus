@@ -1,48 +1,61 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { BarChart3, TrendingUp, Users, DollarSign, Calendar, Download } from 'lucide-vue-next'
+import { ref, onMounted } from 'vue'
+import { BarChart3, TrendingUp, Users, DollarSign, Calendar, Download, FileText, CheckCircle2 } from 'lucide-vue-next'
 
-// Mock metrics data
-const metrics = ref([
+const supabase = useSupabaseClient()
+
+// State
+const reports = ref<any[]>([])
+const loading = ref(true)
+const selectedPeriod = ref('30d')
+
+// Stats (calculated from clients for now)
+const stats = ref([
   {
     title: 'Total de Leads',
-    value: '247',
-    change: '+12%',
+    value: '0',
+    change: 'Total',
     trend: 'up',
     icon: Users,
     color: 'text-blue-500',
     bgColor: 'bg-blue-500/10'
   },
   {
-    title: 'Taxa de Conversão',
-    value: '34.5%',
-    change: '+5.2%',
+    title: 'Qualificados',
+    value: '0',
+    change: 'Conversão',
     trend: 'up',
     icon: TrendingUp,
     color: 'text-[#00E096]',
     bgColor: 'bg-[#00E096]/10'
-  },
-  {
-    title: 'Receita Total',
-    value: 'R$ 45.2K',
-    change: '+18%',
-    trend: 'up',
-    icon: DollarSign,
-    color: 'text-green-500',
-    bgColor: 'bg-green-500/10'
-  },
-  {
-    title: 'Ticket Médio',
-    value: 'R$ 1.8K',
-    change: '-2.1%',
-    trend: 'down',
-    icon: BarChart3,
-    color: 'text-orange-500',
-    bgColor: 'bg-orange-500/10'
   }
 ])
 
-const selectedPeriod = ref('30d')
+const fetchReports = async () => {
+  loading.value = true
+  
+  // 1. Fetch real reports from 'relatorio' table
+  const { data: reportsData } = await supabase
+    .from('relatorio')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(10)
+  
+  if (reportsData) reports.value = reportsData
+
+  // 2. Fetch some stats from clients
+  const { count: totalLeads } = await supabase.from('clients').select('*', { count: 'exact', head: true })
+  const { count: qualifiedLeads } = await supabase.from('clients').select('*', { count: 'exact', head: true }).eq('is_qualified', true)
+
+  stats.value[0].value = (totalLeads || 0).toString()
+  stats.value[1].value = (qualifiedLeads || 0).toString()
+  
+  loading.value = false
+}
+
+onMounted(() => {
+  fetchReports()
+})
 </script>
 
 <template>
@@ -58,146 +71,79 @@ const selectedPeriod = ref('30d')
               <BarChart3 class="w-6 h-6" />
             </div>
             <div>
-              <h1 class="text-3xl font-bold tracking-tight">Relatórios</h1>
-              <p class="text-[#9CA3AF] text-sm mt-1">Análise de performance e métricas</p>
+              <h1 class="text-3xl font-bold tracking-tight">Relatórios & Performance</h1>
+              <p class="text-[#9CA3AF] text-sm mt-1">Dados reais de leads e registros de automação</p>
             </div>
           </div>
 
-          <!-- Period Selector & Export -->
           <div class="flex items-center gap-3">
-            <select
-              v-model="selectedPeriod"
-              class="bg-[#121212] border border-[#27272A] text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00E096]/50"
-            >
-              <option value="7d">Últimos 7 dias</option>
-              <option value="30d">Últimos 30 dias</option>
-              <option value="90d">Últimos 90 dias</option>
-              <option value="1y">Último ano</option>
-            </select>
-
             <button class="flex items-center gap-2 px-4 py-2.5 bg-[#00E096] text-black rounded-lg text-sm font-bold hover:bg-[#00B87A] transition-all">
               <Download class="w-4 h-4" />
-              Exportar
+              Exportar Dados
             </button>
           </div>
         </div>
       </header>
 
-      <!-- Metrics Grid -->
-      <div class="grid grid-cols-4 gap-6 mb-8">
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 gap-6 mb-8">
         <div
-          v-for="metric in metrics"
-          :key="metric.title"
+          v-for="stat in stats"
+          :key="stat.title"
           class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-2xl p-6 hover:border-[#27272A] transition-all"
         >
           <div class="flex items-start justify-between mb-4">
-            <div :class="['p-3 rounded-xl', metric.bgColor]">
-              <component :is="metric.icon" :class="['w-6 h-6', metric.color]" />
+            <div :class="['p-3 rounded-xl', stat.bgColor]">
+              <component :is="stat.icon" :class="['w-6 h-6', stat.color]" />
             </div>
-            <span
-              :class="[
-                'text-xs font-bold px-2 py-1 rounded-full',
-                metric.trend === 'up' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'
-              ]"
-            >
-              {{ metric.change }}
-            </span>
           </div>
-          <h3 class="text-[#9CA3AF] text-sm mb-2">{{ metric.title }}</h3>
-          <p class="text-3xl font-bold text-white">{{ metric.value }}</p>
+          <h3 class="text-[#9CA3AF] text-sm mb-2">{{ stat.title }}</h3>
+          <p class="text-3xl font-bold text-white">{{ stat.value }}</p>
         </div>
       </div>
 
-      <!-- Charts Section -->
-      <div class="grid grid-cols-2 gap-6 mb-8">
+      <!-- Real Reports from Table -->
+      <div class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-2xl overflow-hidden mb-8">
+        <div class="px-6 py-4 border-b border-[#1F1F1F] flex items-center justify-between">
+          <h2 class="text-lg font-bold text-white">Registros de Atividade (Relatório)</h2>
+          <span class="text-xs text-[#9CA3AF]">{{ reports.length }} registros recentes</span>
+        </div>
+
+        <div v-if="loading" class="p-12 text-center text-[#9CA3AF]">
+          Carregando registros...
+        </div>
         
-        <!-- Chart 1: Performance ao Longo do Tempo -->
-        <div class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-2xl p-6">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-lg font-bold text-white">Performance ao Longo do Tempo</h2>
-            <Calendar class="w-5 h-5 text-[#9CA3AF]" />
-          </div>
-          
-          <!-- Chart Placeholder -->
-          <div class="h-64 bg-[#050505] border border-[#1F1F1F] rounded-xl flex items-center justify-center">
-            <div class="text-center">
-              <BarChart3 class="w-12 h-12 text-[#9CA3AF] mx-auto mb-3" />
-              <p class="text-[#9CA3AF] text-sm">Gráfico de linhas</p>
-              <p class="text-[#9CA3AF] text-xs mt-1">Visualização em desenvolvimento</p>
-            </div>
-          </div>
+        <div v-else-if="reports.length === 0" class="p-12 text-center text-[#9CA3AF]">
+          Nenhum registro encontrado na tabela de relatórios.
         </div>
 
-        <!-- Chart 2: Distribuição por Status -->
-        <div class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-2xl p-6">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-lg font-bold text-white">Distribuição por Status</h2>
-            <TrendingUp class="w-5 h-5 text-[#9CA3AF]" />
-          </div>
-          
-          <!-- Chart Placeholder -->
-          <div class="h-64 bg-[#050505] border border-[#1F1F1F] rounded-xl flex items-center justify-center">
-            <div class="text-center">
-              <BarChart3 class="w-12 h-12 text-[#9CA3AF] mx-auto mb-3" />
-              <p class="text-[#9CA3AF] text-sm">Gráfico de pizza</p>
-              <p class="text-[#9CA3AF] text-xs mt-1">Visualização em desenvolvimento</p>
+        <div v-else class="divide-y divide-[#1F1F1F]">
+          <div v-for="report in reports" :key="report.id" class="px-6 py-4 hover:bg-[#121212] transition-all">
+            <div class="flex items-start gap-4">
+              <div :class="['mt-1', report.lido ? 'text-gray-600' : 'text-[#00E096]']">
+                <CheckCircle2 class="w-5 h-5" />
+              </div>
+              <div class="flex-1">
+                <p class="text-white text-sm leading-relaxed">{{ report.texto }}</p>
+                <div class="flex items-center gap-4 mt-2">
+                  <span class="text-[10px] text-[#9CA3AF] uppercase font-bold tracking-wider">
+                    {{ new Date(report.created_at).toLocaleString() }}
+                  </span>
+                  <span v-if="!report.lido" class="px-2 py-0.5 rounded bg-[#00E096]/10 text-[#00E096] text-[10px] font-bold">NOVO</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Table: Top Performers -->
-      <div class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-2xl overflow-hidden">
-        <div class="px-6 py-4 border-b border-[#1F1F1F]">
-          <h2 class="text-lg font-bold text-white">Top Leads Convertidos</h2>
-        </div>
-
-        <!-- Table Header -->
-        <div class="px-6 py-3 bg-[#050505] border-b border-[#1F1F1F] grid grid-cols-12 gap-4 text-xs font-bold text-[#9CA3AF] uppercase tracking-wider">
-          <div class="col-span-4">Cliente</div>
-          <div class="col-span-3">Produto</div>
-          <div class="col-span-2">Data</div>
-          <div class="col-span-3 text-right">Valor</div>
-        </div>
-
-        <!-- Table Rows -->
-        <div class="divide-y divide-[#1F1F1F]">
-          <div class="px-6 py-4 grid grid-cols-12 gap-4 items-center hover:bg-[#121212] transition-all">
-            <div class="col-span-4 flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00E096] to-[#00B87A] flex items-center justify-center text-black font-bold">
-                W
-              </div>
-              <span class="text-white font-medium">William</span>
-            </div>
-            <div class="col-span-3 text-[#9CA3AF]">Consultoria Premium</div>
-            <div class="col-span-2 text-[#9CA3AF]">05/02/2026</div>
-            <div class="col-span-3 text-right text-[#00E096] font-bold">R$ 3.500,00</div>
-          </div>
-
-          <div class="px-6 py-4 grid grid-cols-12 gap-4 items-center hover:bg-[#121212] transition-all">
-            <div class="col-span-4 flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00E096] to-[#00B87A] flex items-center justify-center text-black font-bold">
-                C
-              </div>
-              <span class="text-white font-medium">Caroline Couto Popolín</span>
-            </div>
-            <div class="col-span-3 text-[#9CA3AF]">Plano Básico</div>
-            <div class="col-span-2 text-[#9CA3AF]">04/02/2026</div>
-            <div class="col-span-3 text-right text-[#00E096] font-bold">R$ 1.200,00</div>
-          </div>
-
-          <div class="px-6 py-4 grid grid-cols-12 gap-4 items-center hover:bg-[#121212] transition-all">
-            <div class="col-span-4 flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00E096] to-[#00B87A] flex items-center justify-center text-black font-bold">
-                M
-              </div>
-              <span class="text-white font-medium">Matheus Ferreira</span>
-            </div>
-            <div class="col-span-3 text-[#9CA3AF]">Consultoria Avançada</div>
-            <div class="col-span-2 text-[#9CA3AF]">03/02/2026</div>
-            <div class="col-span-3 text-right text-[#00E096] font-bold">R$ 2.800,00</div>
-          </div>
-        </div>
+      <!-- Footer Info -->
+      <div class="bg-[#121212] border border-[#1F1F1F] rounded-xl p-6 text-center">
+        <BarChart3 class="w-12 h-12 text-[#9CA3AF]/20 mx-auto mb-3" />
+        <h3 class="text-white font-bold mb-2">Análise Avançada</h3>
+        <p class="text-[#9CA3AF] text-sm max-w-md mx-auto">
+          Gráficos e dashboards complexos estão sendo integrados diretamente com os dados de vertical e score gerados pela IA.
+        </p>
       </div>
     </main>
   </div>

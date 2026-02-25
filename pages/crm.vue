@@ -22,7 +22,7 @@ const fetchLeads = async () => {
   error.value = null
   
   const { data, error: fetchError } = await supabase
-    .from('clientes')
+    .from('clients')
     .select('*')
     .order('created_at', { ascending: false })
 
@@ -40,13 +40,13 @@ const handleStatusUpdate = async (id: string, newStatus: CrmStatus) => {
   // Optimistic Update
   const lead = leads.value.find(l => l.id === id)
   if (lead) {
-    lead.status_crm = newStatus
+    lead.estagiokanbam = newStatus
   }
 
   // DB Update
   const { error: updateError } = await supabase
-    .from('clientes')
-    .update({ status_crm: newStatus })
+    .from('clients')
+    .update({ estagiokanbam: newStatus })
     .eq('id', id)
 
   if (updateError) {

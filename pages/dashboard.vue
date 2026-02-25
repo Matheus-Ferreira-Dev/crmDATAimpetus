@@ -54,15 +54,15 @@ const fetchData = async () => {
   try {
     // 1. Fetch Metrics (Parallelly usually better but sequential for clarity here is fine, or Promise.all)
     const metricsPromise = Promise.all([
-      supabase.from('clientes').select('*', { count: 'exact', head: true }),
-      supabase.from('clientes').select('*', { count: 'exact', head: true }).eq('qualificado', true),
-      supabase.from('clientes').select('*', { count: 'exact', head: true }).gte('created_at', dateISO),
-      supabase.from('clientes').select('*', { count: 'exact', head: true }).eq('trava', true)
+      supabase.from('clients').select('*', { count: 'exact', head: true }),
+      supabase.from('clients').select('*', { count: 'exact', head: true }).eq('is_qualified', true),
+      supabase.from('clients').select('*', { count: 'exact', head: true }).gte('created_at', dateISO),
+      supabase.from('clients').select('*', { count: 'exact', head: true }).eq('Ativado', false)
     ])
 
     // 2. Fetch Table Data (Last 7)
     const tablePromise = supabase
-      .from('clientes')
+      .from('clients')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(7)
@@ -80,12 +80,13 @@ const fetchData = async () => {
       fullLeadsData.value = tableRes.data // Store full data for modal
       leads.value = tableRes.data.map((item: any) => ({
         id: item.id,
-        name: item.nome || 'Sem nome',
-        avatar: (item.nome || item.whatsapp_id || 'U').charAt(0).toUpperCase(),
-        phone: item.whatsapp_id,
-        interested: item.qualificado || false,
-        product: item.metadata?.product || 'Não informado',
-        status: item.trava ? 'locked' : (item.is_active ? 'active' : 'active')
+        name: item.name || 'Sem nome',
+        avatar: (item.name || item.remotejid || 'U').charAt(0).toUpperCase(),
+        media_url: item.media_url,
+        phone: item.remotejid,
+        interested: item.is_qualified || false,
+        product: item.vertical || 'Não informado',
+        status: !item.Ativado ? 'locked' : 'active'
       }))
     }
 
@@ -251,7 +252,10 @@ onMounted(() => {
                 <!-- Nome -->
                 <td class="p-4">
                   <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-xs font-bold text-white border border-gray-600 shadow-lg">
+                    <div v-if="lead.media_url" class="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden border border-[#27272A] shadow-lg">
+                      <img :src="lead.media_url" :alt="lead.name || 'Avatar'" class="w-full h-full object-cover" />
+                    </div>
+                    <div v-else class="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-xs font-bold text-white border border-gray-600 shadow-lg">
                       {{ lead.avatar }}
                     </div>
                     <span class="font-medium text-white">{{ lead.name }}</span>

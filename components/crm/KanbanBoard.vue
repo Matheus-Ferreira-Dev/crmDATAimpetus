@@ -16,10 +16,11 @@ const emit = defineEmits<{
 // Columns Configuration
 const columnsConfig = [
   { key: 'novo' as CrmStatus, label: 'Novo', color: 'bg-blue-500', dot: 'bg-blue-500' },
-  { key: 'em_contato' as CrmStatus, label: 'Em Contato', color: 'bg-yellow-500', dot: 'bg-yellow-500' },
-  { key: 'qualificado' as CrmStatus, label: 'Qualificado', color: 'bg-purple-500', dot: 'bg-purple-500' },
-  { key: 'convertido' as CrmStatus, label: 'Convertido', color: 'bg-green-500', dot: 'bg-green-500' },
-  { key: 'perdido' as CrmStatus, label: 'Perdido', color: 'bg-red-500', dot: 'bg-red-500' }
+  { key: 'contato' as CrmStatus, label: 'Contato', color: 'bg-yellow-500', dot: 'bg-yellow-500' },
+  { key: 'qualificando' as CrmStatus, label: 'Qualificando', color: 'bg-purple-500', dot: 'bg-purple-500' },
+  { key: 'Engajado' as CrmStatus, label: 'Engajado', color: 'bg-green-500', dot: 'bg-green-500' },
+  { key: 'qualificado' as CrmStatus, label: 'Qualificado', color: 'bg-red-500', dot: 'bg-red-500' },
+  { key: 'agendado' as CrmStatus, label: 'Agendado', color: 'bg-red-500', dot: 'bg-red-500' }
 ]
 
 // Create a computed property for each column to handle drag & drop
@@ -28,15 +29,15 @@ const columnsData = computed(() => {
   columnsConfig.forEach(col => {
     map[col.key] = computed({
       get: () => {
-        // Force null/empty status_crm into 'novo' column
+        // Force null/empty estagiokanbam into 'novo' column
         if (col.key === 'novo') {
-          return props.leads.filter(l => !l.status_crm || l.status_crm === '' || l.status_crm === 'novo')
+          return props.leads.filter(l => !l.estagiokanbam || l.estagiokanbam === '' || l.estagiokanbam === 'novo')
         }
-        return props.leads.filter(l => l.status_crm === col.key)
+        return props.leads.filter(l => l.estagiokanbam === col.key)
       },
       set: (newVal: Cliente[]) => {
         // Identify the item that doesn't belong to this column yet (status mismatch)
-        const movedLead = newVal.find(l => l.status_crm !== col.key)
+        const movedLead = newVal.find(l => l.estagiokanbam !== col.key)
         if (movedLead) {
            emit('update-status', movedLead.id, col.key)
         }
@@ -80,11 +81,14 @@ const columnsData = computed(() => {
         >
           <!-- Header: Avatar + Name -->
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-xs font-bold text-white border border-gray-600 shadow-md">
-              {{ (lead.nome || 'D').charAt(0).toUpperCase() }}
+            <div v-if="lead.media_url" class="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden border border-[#27272A] shadow-md">
+              <img :src="lead.media_url" :alt="lead.name || 'Avatar'" class="w-full h-full object-cover" />
+            </div>
+            <div v-else class="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-xs font-bold text-white border border-gray-600 shadow-md">
+              {{ (lead.name || 'D').charAt(0).toUpperCase() }}
             </div>
             <div class="flex-1 min-w-0">
-               <span class="font-bold text-white text-sm block truncate">{{ lead.nome || 'Desconhecido' }}</span>
+               <span class="font-bold text-white text-sm block truncate">{{ lead.name || 'Desconhecido' }}</span>
             </div>
             <button 
               @click="emit('view-details', lead)"
@@ -95,10 +99,9 @@ const columnsData = computed(() => {
             </button>
           </div>
 
-          <!-- Body: Phone -->
           <div class="flex items-center gap-2 text-[#9CA3AF] text-xs bg-[#121212] p-2 rounded-lg border border-[#27272A]">
              <Phone class="w-3 h-3" />
-             <span class="font-mono">{{ lead.whatsapp_id }}</span>
+             <span class="font-mono">{{ lead.remotejid }}</span>
           </div>
 
           <!-- Footer: Badges -->

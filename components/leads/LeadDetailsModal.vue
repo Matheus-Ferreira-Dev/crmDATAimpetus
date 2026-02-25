@@ -22,7 +22,7 @@ const localStatus = ref('')
 watch(() => props.lead, (newLead) => {
   if (newLead) {
     localNotes.value = newLead.metadata?.notes || ''
-    localStatus.value = newLead.status_crm || 'novo'
+    localStatus.value = newLead.estagiokanbam || 'novo'
   }
 }, { immediate: true })
 
@@ -49,8 +49,8 @@ const handleStatusChange = async (event: Event) => {
   
   // Auto-save to database
   const { error } = await supabase
-    .from('clientes')
-    .update({ status_crm: newStatus })
+    .from('clients')
+    .update({ estagiokanbam: newStatus })
     .eq('id', props.lead.id)
     
   if (error) console.error('Error updating status:', error)
@@ -65,7 +65,7 @@ const handleSaveNotes = async () => {
     
     // Auto-save to database
     const { error } = await supabase
-      .from('clientes')
+      .from('clients')
       .update({ 
         metadata: { 
           ...props.lead.metadata, 
@@ -125,10 +125,18 @@ const formatDate = (dateString?: string) => {
             <!-- Info Grid -->
             <div class="grid grid-cols-2 gap-6">
               
-              <!-- Nome -->
-              <div class="space-y-1">
-                <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Nome</span>
-                <p class="text-2xl font-bold text-white">{{ lead.nome || 'Desconhecido' }}</p>
+              <!-- Nome e Avatar -->
+              <div class="col-span-2 flex items-center gap-4 border-b border-[#27272A] pb-6 mb-2">
+                <div v-if="lead.media_url" class="w-16 h-16 rounded-full flex-shrink-0 overflow-hidden border border-[#27272A] shadow-lg">
+                  <img :src="lead.media_url" :alt="lead.name || 'Avatar'" class="w-full h-full object-cover" />
+                </div>
+                <div v-else class="w-16 h-16 rounded-full bg-gradient-to-br from-[#00E096] to-[#00B87A] flex items-center justify-center text-black font-bold text-2xl flex-shrink-0 shadow-lg border border-transparent">
+                  {{ (lead.name || 'D').charAt(0).toUpperCase() }}
+                </div>
+                <div class="space-y-1">
+                  <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Nome</span>
+                  <p class="text-2xl font-bold text-white">{{ lead.name || 'Desconhecido' }}</p>
+                </div>
               </div>
 
               <!-- Telefone -->
@@ -136,7 +144,7 @@ const formatDate = (dateString?: string) => {
                 <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Telefone</span>
                 <div class="flex items-center gap-2 text-lg text-white">
                   <Phone class="w-4 h-4 text-[#00E096]" />
-                  <span>{{ lead.whatsapp_id }}</span>
+                  <span>{{ lead.remotejid }}</span>
                 </div>
               </div>
 
@@ -154,7 +162,7 @@ const formatDate = (dateString?: string) => {
                 <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Interessado</span>
                 <div>
                   <span 
-                    v-if="lead.qualificado" 
+                    v-if="lead.is_qualified" 
                     class="inline-flex px-3 py-1 rounded-full text-xs font-bold bg-[#00E096]/10 text-[#00E096] border border-[#00E096]/20"
                   >
                     Sim
@@ -168,12 +176,21 @@ const formatDate = (dateString?: string) => {
                 </div>
               </div>
 
-              <!-- Produto -->
-              <div class="col-span-2 space-y-1">
-                <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Produto de Interesse</span>
+              <!-- Vertical / Produto -->
+              <div class="col-span-1 space-y-1">
+                <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Vertical / Produto</span>
                 <div class="flex items-center gap-2 text-white">
                   <Package class="w-4 h-4 text-[#00E096]" />
-                  <span>{{ lead.metadata?.produto_interesse || 'Não informado' }}</span>
+                  <span>{{ lead.vertical || 'Não informado' }}</span>
+                </div>
+              </div>
+
+              <!-- Score -->
+              <div class="col-span-1 space-y-1">
+                <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Score IA</span>
+                <div class="flex items-center gap-2 text-white">
+                  <TrendingUp class="w-4 h-4 text-primary-500" />
+                  <span class="font-bold">{{ lead.score || 'N/A' }}</span>
                 </div>
               </div>
 

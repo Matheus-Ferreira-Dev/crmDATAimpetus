@@ -18,7 +18,7 @@ const fetchContacts = async () => {
   loading.value = true
   
   const { data, error } = await supabase
-    .from('clientes')
+    .from('clients')
     .select('*')
     .order('created_at', { ascending: false })
   
@@ -39,8 +39,8 @@ const filteredContacts = computed(() => {
 
   const query = searchQuery.value.toLowerCase()
   return contacts.value.filter(contact => 
-    (contact.nome?.toLowerCase().includes(query)) ||
-    (contact.whatsapp_id?.toLowerCase().includes(query))
+    (contact.name?.toLowerCase().includes(query)) ||
+    (contact.remotejid?.toLowerCase().includes(query))
   )
 })
 
@@ -54,7 +54,7 @@ const openContactDetails = (contact: Cliente) => {
 const handleStatusUpdate = async (id: string, newStatus: string) => {
   const contact = contacts.value.find(c => c.id === id)
   if (contact) {
-    contact.status_crm = newStatus as any
+    contact.estagiokanbam = newStatus
   }
 }
 
@@ -140,18 +140,21 @@ onMounted(() => {
             <!-- Left: Avatar + Name + Phone -->
             <div class="col-span-8 flex items-center gap-4">
               <!-- Avatar -->
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00E096] to-[#00B87A] flex items-center justify-center text-black font-bold text-lg flex-shrink-0">
-                {{ (contact.nome || 'D').charAt(0).toUpperCase() }}
+              <div v-if="contact.media_url" class="w-10 h-10 rounded-full flex-shrink-0 overflow-hidden border border-[#27272A]">
+                <img :src="contact.media_url" :alt="contact.name || 'Avatar'" class="w-full h-full object-cover" />
+              </div>
+              <div v-else class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00E096] to-[#00B87A] flex items-center justify-center text-black font-bold text-lg flex-shrink-0">
+                {{ (contact.name || 'D').charAt(0).toUpperCase() }}
               </div>
 
               <!-- Info -->
               <div class="min-w-0 flex-1">
                 <h3 class="font-bold text-white text-base truncate">
-                  {{ contact.nome || 'Desconhecido' }}
+                  {{ contact.name || 'Desconhecido' }}
                 </h3>
                 <div class="flex items-center gap-2 text-sm text-[#9CA3AF] mt-0.5">
                   <Phone class="w-3 h-3" />
-                  <span>{{ contact.whatsapp_id }}</span>
+                  <span>{{ contact.remotejid }}</span>
                 </div>
               </div>
             </div>
@@ -160,7 +163,7 @@ onMounted(() => {
             <div class="col-span-4 flex items-center justify-end gap-2">
               <!-- Interesse Badge -->
               <span
-                v-if="contact.qualificado"
+                v-if="contact.is_qualified"
                 class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#00E096]/10 text-[#00E096] border border-[#00E096]/20"
               >
                 Sim
@@ -174,7 +177,7 @@ onMounted(() => {
 
               <!-- Travado Badge -->
               <span
-                v-if="contact.trava"
+                v-if="!contact.Ativado"
                 class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-orange-500/10 text-orange-500 border border-orange-500/20"
               >
                 Travado

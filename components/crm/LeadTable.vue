@@ -38,29 +38,32 @@ const statusConfig: Record<CrmStatus, { label: string; dot: string }> = {
             <!-- Nome -->
             <td class="p-4">
               <div class="flex items-center gap-3">
-                 <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-xs font-bold text-white border border-gray-600 shadow-lg">
-                    {{ (lead.nome || 'D').charAt(0).toUpperCase() }}
+                 <div v-if="lead.media_url" class="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden border border-[#27272A] shadow-lg">
+                    <img :src="lead.media_url" :alt="lead.name || 'Avatar'" class="w-full h-full object-cover" />
                  </div>
-                 <span class="font-medium text-white">{{ lead.nome || 'Desconhecido' }}</span>
+                 <div v-else class="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-xs font-bold text-white border border-gray-600 shadow-lg">
+                    {{ (lead.name || 'D').charAt(0).toUpperCase() }}
+                 </div>
+                 <span class="font-medium text-white">{{ lead.name || 'Desconhecido' }}</span>
               </div>
             </td>
 
             <!-- Telefone -->
             <td class="p-4">
-               <span class="text-[#9CA3AF] text-sm font-mono">{{ lead.whatsapp_id }}</span>
+               <span class="text-[#9CA3AF] text-sm font-mono">{{ lead.remotejid }}</span>
             </td>
 
             <!-- Status -->
             <td class="p-4">
               <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[#18181B] border border-[#27272A]">
-                <div :class="['w-2 h-2 rounded-full', statusConfig[lead.status_crm as CrmStatus]?.dot || 'bg-gray-500']"></div>
-                <span class="text-white">{{ statusConfig[lead.status_crm as CrmStatus]?.label || lead.status_crm || 'Novo' }}</span>
+                <div :class="['w-2 h-2 rounded-full', statusConfig[lead.estagiokanbam as CrmStatus]?.dot || 'bg-gray-500']"></div>
+                <span class="text-white">{{ statusConfig[lead.estagiokanbam as CrmStatus]?.label || lead.estagiokanbam || 'Novo' }}</span>
               </div>
             </td>
 
             <!-- Interesse -->
             <td class="p-4">
-              <span v-if="lead.qualificado" class="inline-flex px-2.5 py-1 rounded-full text-xs font-bold bg-[#00E096]/10 text-[#00E096] border border-[#00E096]/20">
+              <span v-if="lead.is_qualified" class="inline-flex px-2.5 py-1 rounded-full text-xs font-bold bg-[#00E096]/10 text-[#00E096] border border-[#00E096]/20">
                 Sim
               </span>
               <span v-else class="inline-flex px-2.5 py-1 rounded-full text-xs font-bold bg-[#27272A] text-gray-400 border border-[#3F3F46]">
@@ -70,11 +73,11 @@ const statusConfig: Record<CrmStatus, { label: string; dot: string }> = {
 
              <!-- Modo -->
             <td class="p-4 text-sm">
-               <span v-if="lead.trava" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-orange-500/10 text-orange-500 border border-orange-500/20">
-                  <Lock class="w-3 h-3" /> Manual
+               <span v-if="!lead.Ativado" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-orange-500/10 text-orange-500 border border-orange-500/20">
+                  <Lock class="w-3 h-3" /> Desativado
                </span>
                <span v-else class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#00E096]/10 text-[#00E096] border border-[#00E096]/20">
-                  <Bot class="w-3 h-3" /> Auto
+                  <Bot class="w-3 h-3" /> Ativado
                </span>
             </td>
 
