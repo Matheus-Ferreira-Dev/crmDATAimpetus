@@ -111,7 +111,6 @@
 </style>
 
 <script setup lang="ts">
-const supabase = useSupabaseClient()
 const router = useRouter()
 
 const form = reactive({
@@ -126,56 +125,22 @@ const feedback = reactive({
   message: ''
 })
 
-// Variable to store the new user's ID
-const registeredUserId = ref<string | null>(null)
-
 const handleRegister = async () => {
   loading.value = true
   feedback.message = ''
   feedback.type = ''
-  registeredUserId.value = null
 
   try {
-    // 1. Register User in Supabase Auth
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email: form.email,
-      password: form.password,
-      options: {
-        data: {
-          full_name: form.fullName
-        }
-      }
-    })
+    // Simulate API call for mock registration
+    await new Promise(resolve => setTimeout(resolve, 800))
 
-    if (authError) throw authError
-
-    if (authData.user) {
-      registeredUserId.value = authData.user.id
-
-      // 2. Insert User into public.usuario table
-      const { error: dbError } = await supabase
-        .from('usuario')
-        .insert({
-          user_id: authData.user.id,
-          nome: form.fullName,
-          email: form.email
-        } as any)
-
-      if (dbError) {
-        // Log DB error but maybe don't block the user flow entirely if Auth succeeded? 
-        // For now, treat as error to ensure data consistency.
-        console.error('Database Insertion Error:', dbError)
-        throw new Error('Erro ao salvar dados do usuário.')
-      }
-
-      // Success
-      feedback.type = 'success'
-      feedback.message = 'Conta criada com SUCESSO! Redirecionando...'
-      
-      setTimeout(() => {
-        router.push('/dashboard')
-      }, 1500)
-    }
+    // Mock success
+    feedback.type = 'success'
+    feedback.message = 'Conta criada com SUCESSO! Redirecionando...'
+    
+    setTimeout(() => {
+      router.push('/dashboard')
+    }, 1500)
   } catch (error: any) {
     console.error('Registration Error:', error)
     feedback.type = 'error'

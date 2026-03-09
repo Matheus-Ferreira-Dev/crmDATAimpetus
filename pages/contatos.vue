@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { User, Phone, Search } from 'lucide-vue-next'
+import { User, Phone, Search, Eye, EyeOff, Filter, Calendar } from 'lucide-vue-next'
 import LeadDetailsModal from '@/components/leads/LeadDetailsModal.vue'
 import type { Cliente } from '@/types/crm'
 
-const supabase = useSupabaseClient()
+const { mainMargin } = useSidebarState()
 
 // State
 const contacts = ref<Cliente[]>([])
@@ -12,37 +12,53 @@ const loading = ref(true)
 const searchQuery = ref('')
 const showModal = ref(false)
 const selectedContact = ref<Cliente | null>(null)
+const phoneBlurred = ref(true)
+const showFilters = ref(false)
+const filterQualified = ref<'all' | 'yes' | 'no'>('all')
+const filterDateFrom = ref('')
+const filterDateTo = ref('')
 
 // Fetch contacts
 const fetchContacts = async () => {
   loading.value = true
   
-  const { data, error } = await supabase
-    .from('clients')
-    .select('*')
-    .order('created_at', { ascending: false })
-  
-  if (error) {
+  try {
+    const { mockLeads } = useMockData()
+    await new Promise(resolve => setTimeout(resolve, 300))
+    contacts.value = mockLeads as Cliente[]
+  } catch (error) {
     console.error('Error fetching contacts:', error)
-  } else {
-    contacts.value = (data as Cliente[]) || []
+  } finally {
+    loading.value = false
   }
-  
-  loading.value = false
 }
 
-// Filtered contacts based on search
+// Filtered contacts based on search + filters
 const filteredContacts = computed(() => {
-  if (!searchQuery.value.trim()) {
-    return contacts.value
+  let result = [...contacts.value]
+
+  if (searchQuery.value.trim()) {
+    const query = searchQuery.value.toLowerCase()
+    result = result.filter(contact => 
+      (contact.name?.toLowerCase().includes(query)) ||
+      (contact.remotejid?.toLowerCase().includes(query))
+    )
   }
 
-  const query = searchQuery.value.toLowerCase()
-  return contacts.value.filter(contact => 
-    (contact.name?.toLowerCase().includes(query)) ||
-    (contact.remotejid?.toLowerCase().includes(query))
-  )
+  if (filterQualified.value !== 'all') {
+    result = result.filter(c => filterQualified.value === 'yes' ? c.is_qualified : !c.is_qualified)
+  }
+
+  return result
 })
+
+const hasActiveFilters = computed(() => filterQualified.value !== 'all' || filterDateFrom.value || filterDateTo.value)
+
+const clearFilters = () => {
+  filterQualified.value = 'all'
+  filterDateFrom.value = ''
+  filterDateTo.value = ''
+}
 
 // Open modal
 const openContactDetails = (contact: Cliente) => {
@@ -54,15 +70,15 @@ const openContactDetails = (contact: Cliente) => {
 const handleStatusUpdate = async (id: string, newStatus: string) => {
   const contact = contacts.value.find(c => c.id === id)
   if (contact) {
-    contact.estagiokanbam = newStatus
+    (contact as any).estagiokanbam = newStatus
   }
 }
 
 // Handle notes update from modal
 const handleNotesUpdate = async (id: string, notes: string) => {
   const contact = contacts.value.find(c => c.id === id)
-  if (contact && contact.metadata) {
-    contact.metadata.notes = notes
+  if (contact && (contact as any).metadata) {
+    (contact as any).metadata.notes = notes
   }
 }
 
@@ -72,61 +88,116 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#050505] text-white font-sans selection:bg-primary-500 selection:text-black">
+  <div class="min-h-screen bg-gray-50 dark:bg-dark-bg text-gray-900 dark:text-white font-sans selection:bg-primary-500 selection:text-white transition-colors duration-300">
     <Sidebar />
 
-    <main class="ml-64 p-8">
+    <main :class="[mainMargin, 'p-10 transition-all duration-300']">
       <!-- Header -->
       <header class="mb-8">
-        <h1 class="text-3xl font-bold text-white">Contatos</h1>
-        <p class="text-[#9CA3AF] text-sm mt-1">Lista de todos os contatos com filtros</p>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Contatos</h1>
+        <p class="text-gray-400 dark:text-dark-muted text-sm mt-1">Lista de todos os contatos com filtros</p>
       </header>
 
       <!-- Main Card -->
-      <div class="bg-[#0A0A0A] rounded-2xl border border-[#1F1F1F] overflow-hidden">
+      <div class="bg-white dark:bg-dark-surface rounded-xl border border-gray-200 dark:border-dark-border overflow-hidden shadow-sm transition-colors">
         
         <!-- Card Header with Icon and Count -->
-        <div class="px-6 py-4 border-b border-[#1F1F1F] flex items-center justify-between">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-dark-border flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <div class="p-2 bg-[#00E096]/10 rounded-lg">
-              <User class="w-5 h-5 text-[#00E096]" />
+            <div class="p-2 bg-primary-100 dark:bg-primary-900/40 rounded-xl">
+              <User class="w-5 h-5 text-primary-600 dark:text-primary-500" />
             </div>
-            <h2 class="text-lg font-bold text-white">Contatos</h2>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Diretório de Pacientes</h2>
           </div>
-          <span class="bg-[#1F1F1F] text-white text-xs font-bold px-3 py-1.5 rounded-full border border-[#2A2A2A]">
-            {{ filteredContacts.length }} de {{ contacts.length }}
-          </span>
+          <div class="flex items-center gap-2">
+            <!-- Phone Blur -->
+            <button 
+              @click="phoneBlurred = !phoneBlurred"
+              :class="['flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors border', phoneBlurred ? 'text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-card border-gray-100 dark:border-dark-border' : 'text-primary-600 bg-primary-50 dark:bg-primary-500/10 border-primary-200 dark:border-primary-500/20']"
+            >
+              <EyeOff v-if="phoneBlurred" class="w-3.5 h-3.5" />
+              <Eye v-else class="w-3.5 h-3.5" />
+            </button>
+
+            <!-- Filter toggle -->
+            <button 
+              @click="showFilters = !showFilters"
+              :class="['flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors border', showFilters || hasActiveFilters ? 'text-primary-600 bg-primary-50 dark:bg-primary-500/10 border-primary-200 dark:border-primary-500/20' : 'text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-card border-gray-100 dark:border-dark-border']"
+            >
+              <Filter class="w-3.5 h-3.5" />
+              <span v-if="!showFilters">Filtrar</span>
+            </button>
+
+            <span class="bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 text-xs font-bold px-3 py-1.5 rounded-full border border-gray-200 dark:border-white/10 shadow-inner">
+              {{ filteredContacts.length }} de {{ contacts.length }}
+            </span>
+          </div>
         </div>
 
+        <!-- Filters Panel -->
+        <Transition name="slide">
+          <div v-if="showFilters" class="px-6 py-4 border-b border-gray-200 dark:border-dark-border bg-gray-50/80 dark:bg-dark-card/30">
+            <div class="flex flex-wrap items-center gap-6">
+              <!-- Qualified Filter -->
+              <div class="flex items-center gap-3">
+                <span class="text-[11px] font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wider">Status</span>
+                <div class="flex gap-1.5 bg-white dark:bg-dark-surface p-1 rounded-xl border border-gray-100 dark:border-dark-border">
+                  <button 
+                    v-for="opt in [{ value: 'all', label: 'Todos' }, { value: 'yes', label: 'Qualificado' }, { value: 'no', label: 'Pendente' }]"
+                    :key="opt.value"
+                    @click="filterQualified = opt.value as any"
+                    :class="['px-3 py-1.5 rounded-lg text-xs font-semibold transition-all', filterQualified === opt.value ? 'bg-primary-500 text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-dark-card']"
+                  >
+                    {{ opt.label }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Date Filter -->
+              <div class="flex items-center gap-3">
+                <span class="text-[11px] font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wider">Período</span>
+                <div class="flex items-center gap-2">
+                  <input v-model="filterDateFrom" type="date" class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-400" />
+                  <span class="text-[10px] text-gray-400">até</span>
+                  <input v-model="filterDateTo" type="date" class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-400" />
+                </div>
+              </div>
+
+              <!-- Clear -->
+              <button v-if="hasActiveFilters" @click="clearFilters" class="text-xs text-red-500 hover:text-red-600 font-medium">Limpar</button>
+            </div>
+          </div>
+        </Transition>
+
         <!-- Search Bar -->
-        <div class="px-6 py-4 bg-[#0D0D0D] border-b border-[#1F1F1F]">
-          <div class="relative">
-            <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+        <div class="px-6 py-4 bg-gray-50 dark:bg-dark-bg border-b border-gray-200 dark:border-dark-border">
+          <div class="relative max-w-2xl">
+            <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Buscar por nome ou telefone..."
-              class="w-full bg-[#050505] border border-[#1F1F1F] text-white placeholder-gray-500 rounded-lg pl-14 pr-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00E096]/50 focus:border-[#00E096]/50 transition-all"
+              placeholder="Buscar paciente por nome ou telefone..."
+              class="w-full bg-white dark:bg-dark-surface border border-gray-300 dark:border-dark-border text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-xl pl-12 pr-4 py-3 text-sm flex-1 focus:outline-none focus:ring-1 focus:ring-primary-500 shadow-sm transition-all"
             />
           </div>
         </div>
 
         <!-- Table Header -->
-        <div class="px-6 py-3 bg-[#0A0A0A] border-b border-[#1F1F1F] grid grid-cols-12 gap-4 text-xs font-bold text-[#9CA3AF] uppercase tracking-wider">
+        <div class="px-6 py-3 bg-gray-50 dark:bg-dark-bg border-b border-gray-200 dark:border-dark-border grid grid-cols-12 gap-4 text-xs font-bold text-gray-500 dark:text-dark-muted uppercase tracking-wider">
           <div class="col-span-8">Nome</div>
-          <div class="col-span-4 text-right">Interessado</div>
+          <div class="col-span-4 text-right">Avaliação</div>
         </div>
 
         <!-- Contact List -->
-        <div class="divide-y divide-[#1F1F1F]">
+        <div class="divide-y divide-gray-200 dark:divide-dark-border">
           <!-- Loading State -->
           <div v-if="loading" class="p-12 flex items-center justify-center">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00E096]"></div>
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
           </div>
 
           <!-- Empty State -->
           <div v-else-if="filteredContacts.length === 0" class="p-12 text-center">
-            <p class="text-[#9CA3AF]">Nenhum contato encontrado</p>
+            <p class="text-gray-500 dark:text-dark-muted">Nenhum paciente encontrado</p>
           </div>
 
           <!-- Contact Rows -->
@@ -135,52 +206,51 @@ onMounted(() => {
             v-for="contact in filteredContacts"
             :key="contact.id"
             @click="openContactDetails(contact)"
-            class="px-6 py-4 bg-[#0A0A0A] hover:bg-[#121212] cursor-pointer transition-all group grid grid-cols-12 gap-4 items-center"
+            class="px-6 py-4 bg-white dark:bg-dark-surface hover:bg-gray-50 dark:hover:bg-white/5 cursor-pointer transition-all group grid grid-cols-12 gap-4 items-center"
           >
             <!-- Left: Avatar + Name + Phone -->
             <div class="col-span-8 flex items-center gap-4">
               <!-- Avatar -->
-              <div v-if="contact.media_url" class="w-10 h-10 rounded-full flex-shrink-0 overflow-hidden border border-[#27272A]">
-                <img :src="contact.media_url" :alt="contact.name || 'Avatar'" class="w-full h-full object-cover" />
+              <div v-if="(contact as any).media_url" class="w-10 h-10 rounded-xl flex-shrink-0 overflow-hidden border border-gray-200 dark:border-dark-border shadow-sm">
+                <img :src="(contact as any).media_url" :alt="contact.name || 'Avatar'" class="w-full h-full object-cover" />
               </div>
-              <div v-else class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00E096] to-[#00B87A] flex items-center justify-center text-black font-bold text-lg flex-shrink-0">
-                {{ (contact.name || 'D').charAt(0).toUpperCase() }}
+              <div v-else class="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-500 flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-sm">
+                {{ (contact.name || 'P').charAt(0).toUpperCase() }}
               </div>
 
               <!-- Info -->
               <div class="min-w-0 flex-1">
-                <h3 class="font-bold text-white text-base truncate">
+                <h3 class="font-bold text-gray-900 dark:text-white text-base truncate group-hover:text-primary-500 transition-colors">
                   {{ contact.name || 'Desconhecido' }}
                 </h3>
-                <div class="flex items-center gap-2 text-sm text-[#9CA3AF] mt-0.5">
+                <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-dark-muted mt-0.5">
                   <Phone class="w-3 h-3" />
-                  <span>{{ contact.remotejid }}</span>
+                  <span :class="{ 'blur-sm select-none': phoneBlurred }">{{ contact.remotejid }}</span>
                 </div>
               </div>
             </div>
 
             <!-- Right: Status Badges -->
             <div class="col-span-4 flex items-center justify-end gap-2">
-              <!-- Interesse Badge -->
               <span
                 v-if="contact.is_qualified"
-                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#00E096]/10 text-[#00E096] border border-[#00E096]/20"
+                class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-500 border border-primary-200 dark:border-primary-500/20"
               >
-                Sim
+                Aprovado
               </span>
               <span
                 v-else
-                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#1F1F1F] text-gray-400 border border-[#2A2A2A]"
+                class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-white/10"
               >
-                Não
+                 Pendente
               </span>
 
               <!-- Travado Badge -->
               <span
                 v-if="!contact.Ativado"
-                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-orange-500/10 text-orange-500 border border-orange-500/20"
+                class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-500 border border-red-200 dark:border-red-500/20"
               >
-                Travado
+                 Travado
               </span>
             </div>
           </div>
@@ -198,3 +268,17 @@ onMounted(() => {
     @save-notes="handleNotesUpdate"
   />
 </template>
+
+<style scoped>
+.slide-enter-active, .slide-leave-active {
+  transition: all 0.2s ease;
+}
+.slide-enter-from, .slide-leave-to {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+.slide-enter-to, .slide-leave-from {
+  max-height: 200px;
+}
+</style>

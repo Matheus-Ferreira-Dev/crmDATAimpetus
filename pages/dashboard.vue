@@ -6,19 +6,22 @@ import {
   AlertCircle, 
   Filter, 
   Eye, 
+  EyeOff,
   Lock, 
-  MoreHorizontal,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  X,
+  TrendingUp,
+  Users
 } from 'lucide-vue-next'
 import LeadDetailsModal from '@/components/leads/LeadDetailsModal.vue'
 import type { Cliente } from '@/types/crm'
 
-const supabase = useSupabaseClient()
-
 definePageMeta({
   // middleware: 'auth'
 })
+
+const { mainMargin } = useSidebarState()
 
 interface Lead {
   id: string
@@ -28,6 +31,7 @@ interface Lead {
   interested: boolean
   product: string
   status: 'active' | 'locked'
+  media_url?: string
 }
 
 // Reactive State
@@ -42,53 +46,88 @@ const loading = ref(true)
 const showModal = ref(false)
 const selectedLead = ref<Cliente | null>(null)
 const fullLeadsData = ref<any[]>([])
+const phoneBlurred = ref(true)
 
-// Helper to calculate date 7 days ago
-const sevenDaysAgo = new Date()
-sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
-const dateISO = sevenDaysAgo.toISOString()
+const maskPhone = (phone: string) => {
+  if (!phone) return ''
+  if (phoneBlurred.value) {
+    return phone.slice(0, 4) + '•••••' + phone.slice(-2)
+  }
+  return phone
+}
 
-// Fetch Data
+// Filter State
+const showFilters = ref(false)
+const filterStatus = ref<'all' | 'active' | 'locked'>('all')
+const filterInterest = ref<'all' | 'yes' | 'no'>('all')
+const filterDateFrom = ref('')
+const filterDateTo = ref('')
+const filterProduct = ref<'all' | string>('all')
+
+// Pagination State
+const currentPage = ref(1)
+const itemsPerPage = 5
+
+// Computed filtered leads
+const filteredLeads = computed(() => {
+  let result = [...leads.value]
+  
+  if (filterStatus.value !== 'all') {
+    result = result.filter(l => l.status === filterStatus.value)
+  }
+  
+  if (filterInterest.value !== 'all') {
+    result = result.filter(l => filterInterest.value === 'yes' ? l.interested : !l.interested)
+  }
+  
+  return result
+})
+
+// Computed pagination
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredLeads.value.length / itemsPerPage)))
+const paginatedLeads = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  return filteredLeads.value.slice(start, start + itemsPerPage)
+})
+
+const goToPage = (page: number) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
+
+// Reset to page 1 when filters change
+watch([filterStatus, filterInterest, filterDateFrom, filterDateTo, filterProduct], () => {
+  currentPage.value = 1
+})
+
+const clearFilters = () => {
+  filterStatus.value = 'all'
+  filterInterest.value = 'all'
+}
+
+const hasActiveFilters = computed(() => filterStatus.value !== 'all' || filterInterest.value !== 'all')
+
+// Fetch Data (Mocked)
 const fetchData = async () => {
   loading.value = true
   try {
-    // 1. Fetch Metrics (Parallelly usually better but sequential for clarity here is fine, or Promise.all)
-    const metricsPromise = Promise.all([
-      supabase.from('clients').select('*', { count: 'exact', head: true }),
-      supabase.from('clients').select('*', { count: 'exact', head: true }).eq('is_qualified', true),
-      supabase.from('clients').select('*', { count: 'exact', head: true }).gte('created_at', dateISO),
-      supabase.from('clients').select('*', { count: 'exact', head: true }).eq('Ativado', false)
-    ])
+    const { mockMetrics, mockLeads } = useMockData()
+    await new Promise(resolve => setTimeout(resolve, 600))
 
-    // 2. Fetch Table Data (Last 7)
-    const tablePromise = supabase
-      .from('clients')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(7)
+    Object.assign(metrics, mockMetrics)
 
-    const [[totalRes, interestedRes, newRes, lockedRes], tableRes] = await Promise.all([metricsPromise, tablePromise])
-
-    // Update Metrics
-    metrics.total = totalRes.count || 0
-    metrics.interested = interestedRes.count || 0
-    metrics.newLeads = newRes.count || 0
-    metrics.locked = lockedRes.count || 0
-
-    // Update Leads Table
-    if (tableRes.data) {
-      fullLeadsData.value = tableRes.data // Store full data for modal
-      leads.value = tableRes.data.map((item: any) => ({
-        id: item.id,
-        name: item.name || 'Sem nome',
-        avatar: (item.name || item.remotejid || 'U').charAt(0).toUpperCase(),
-        media_url: item.media_url,
-        phone: item.remotejid,
-        interested: item.is_qualified || false,
-        product: item.vertical || 'Não informado',
-        status: !item.Ativado ? 'locked' : 'active'
-      }))
-    }
+    fullLeadsData.value = mockLeads
+    leads.value = mockLeads.map((item: any) => ({
+      id: item.id,
+      name: item.name || 'Sem nome',
+      avatar: (item.name || item.remotejid || 'U').charAt(0).toUpperCase(),
+      media_url: item.media_url,
+      phone: item.remotejid,
+      interested: item.is_qualified || false,
+      product: item.vertical || 'Não informado',
+      status: !item.Ativado ? 'locked' : 'active'
+    }))
 
   } catch (error) {
     console.error('Error fetching dashboard data:', error)
@@ -97,7 +136,6 @@ const fetchData = async () => {
   }
 }
 
-// Open Lead Details Modal
 const openLeadDetails = (leadId: string) => {
   const fullLead = fullLeadsData.value.find((l: any) => l.id === leadId)
   if (fullLead) {
@@ -106,12 +144,10 @@ const openLeadDetails = (leadId: string) => {
   }
 }
 
-// Open Chat Page
 const openChat = (leadId: string) => {
   navigateTo(`/chats?clientId=${leadId}`)
 }
 
-// Handle Status Update
 const handleStatusUpdate = async (id: string, newStatus: string) => {
   const lead = fullLeadsData.value.find(l => l.id === id)
   if (lead) {
@@ -119,7 +155,6 @@ const handleStatusUpdate = async (id: string, newStatus: string) => {
   }
 }
 
-// Handle Notes Update
 const handleNotesUpdate = async (id: string, notes: string) => {
   const lead = fullLeadsData.value.find(l => l.id === id)
   if (lead && lead.metadata) {
@@ -133,189 +168,302 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#050505] text-white font-sans selection:bg-primary-500 selection:text-black">
+  <div class="min-h-screen bg-gray-50 dark:bg-dark-bg text-gray-900 dark:text-dark-text font-sans transition-colors duration-300">
     <Sidebar />
 
-    <main class="ml-64 p-8">
+    <main :class="[mainMargin, 'p-10 transition-all duration-300']">
       <!-- Header -->
       <header class="flex justify-between items-center mb-10">
         <div>
-          <h1 class="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
-          <p class="text-[#9CA3AF] mt-1">Bem-vindo ao seu painel de controle.</p>
+          <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Dashboard</h1>
+          <p class="text-gray-400 dark:text-dark-muted mt-1 text-sm">Visão geral da sua clínica.</p>
         </div>
         
         <div class="flex items-center gap-4">
-          <div class="text-sm text-[#9CA3AF]">
+          <div class="text-sm font-medium text-gray-400 dark:text-dark-muted bg-white dark:bg-dark-surface px-4 py-2 rounded-xl border border-gray-100 dark:border-dark-border">
             {{ new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
           </div>
         </div>
       </header>
 
-      <!-- 1. Metrics Section (Grid) -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <!-- Metrics Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
         <!-- Card 1: Total de Leads -->
-        <div class="bg-[#121212] border-l-4 border-[#00E096] p-6 rounded-r-xl shadow-lg hover:shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-all">
-          <div class="flex justify-between items-start mb-2">
+        <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 group">
+          <div class="flex justify-between items-start mb-3">
             <div>
-              <p class="text-[#9CA3AF] text-xs uppercase tracking-wider font-bold mb-1">Total de Leads</p>
-              <h3 class="text-3xl font-bold text-white">{{ metrics.total }}</h3>
+              <p class="text-gray-400 dark:text-dark-muted text-xs uppercase tracking-wider font-semibold mb-2">Total de Leads</p>
+              <h3 class="text-3xl font-bold text-gray-900 dark:text-white">{{ metrics.total }}</h3>
             </div>
-            <div class="p-2 bg-[#00E096]/10 rounded-lg text-[#00E096]">
-              <Phone class="w-6 h-6" />
+            <div class="p-2.5 bg-primary-50 dark:bg-primary-500/10 rounded-xl text-primary-500 group-hover:scale-110 transition-transform">
+              <Users class="w-5 h-5" />
             </div>
           </div>
-          <p class="text-xs text-[#9CA3AF]">Contatos no WhatsApp</p>
+          <p class="text-xs text-gray-400 dark:text-dark-muted">Contatos no WhatsApp</p>
         </div>
 
         <!-- Card 2: Leads Interessados -->
-        <div class="bg-[#121212] border-l-4 border-[#00E096] p-6 rounded-r-xl shadow-lg hover:shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-all">
-          <div class="flex justify-between items-start mb-2">
+        <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 group">
+          <div class="flex justify-between items-start mb-3">
             <div>
-              <p class="text-[#9CA3AF] text-xs uppercase tracking-wider font-bold mb-1">Leads Interessados</p>
-              <h3 class="text-3xl font-bold text-white">{{ metrics.interested }}</h3>
+              <p class="text-gray-400 dark:text-dark-muted text-xs uppercase tracking-wider font-semibold mb-2">Interessados</p>
+              <h3 class="text-3xl font-bold text-gray-900 dark:text-white">{{ metrics.interested }}</h3>
             </div>
-            <div class="p-2 bg-[#00E096]/10 rounded-lg text-[#00E096]">
-              <MessageSquare class="w-6 h-6" />
+            <div class="p-2.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl text-emerald-500 group-hover:scale-110 transition-transform">
+              <TrendingUp class="w-5 h-5" />
             </div>
           </div>
-          <p class="text-xs text-[#9CA3AF]">Responderam positivamente</p>
+          <p class="text-xs text-gray-400 dark:text-dark-muted">Responderam positivamente</p>
         </div>
 
         <!-- Card 3: Novos (7 dias) -->
-        <div class="bg-[#121212] border-l-4 border-blue-500 p-6 rounded-r-xl shadow-lg hover:shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-all">
-          <div class="flex justify-between items-start mb-2">
+        <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 group">
+          <div class="flex justify-between items-start mb-3">
             <div>
-              <p class="text-[#9CA3AF] text-xs uppercase tracking-wider font-bold mb-1">Novos (7 dias)</p>
-              <h3 class="text-3xl font-bold text-white">{{ metrics.newLeads }}</h3>
+              <p class="text-gray-400 dark:text-dark-muted text-xs uppercase tracking-wider font-semibold mb-2">Novos (7 dias)</p>
+              <h3 class="text-3xl font-bold text-gray-900 dark:text-white">{{ metrics.newLeads }}</h3>
             </div>
-            <div class="p-2 bg-blue-500/10 rounded-lg text-blue-500">
-              <Clock class="w-6 h-6" />
+            <div class="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-xl text-blue-500 group-hover:scale-110 transition-transform">
+              <Clock class="w-5 h-5" />
             </div>
           </div>
-          <p class="text-xs text-[#9CA3AF]">Novos contatos esta semana</p>
+          <p class="text-xs text-gray-400 dark:text-dark-muted">Novos contatos esta semana</p>
         </div>
 
         <!-- Card 4: Conversas Travadas -->
-        <div class="bg-[#121212] border-l-4 border-red-500 p-6 rounded-r-xl shadow-lg hover:shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-all">
-          <div class="flex justify-between items-start mb-2">
+        <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 group">
+          <div class="flex justify-between items-start mb-3">
             <div>
-              <p class="text-[#9CA3AF] text-xs uppercase tracking-wider font-bold mb-1">Conversas Travadas</p>
-              <h3 class="text-3xl font-bold text-white">{{ metrics.locked }}</h3>
+              <p class="text-gray-400 dark:text-dark-muted text-xs uppercase tracking-wider font-semibold mb-2">Travadas</p>
+              <h3 class="text-3xl font-bold text-gray-900 dark:text-white">{{ metrics.locked }}</h3>
             </div>
-            <div class="p-2 bg-red-500/10 rounded-lg text-red-500">
-              <AlertCircle class="w-6 h-6" />
+            <div class="p-2.5 bg-amber-50 dark:bg-amber-500/10 rounded-xl text-amber-500 group-hover:scale-110 transition-transform">
+              <AlertCircle class="w-5 h-5" />
             </div>
           </div>
-          <p class="text-xs text-[#9CA3AF]">Conversas pausadas/travadas</p>
+          <p class="text-xs text-gray-400 dark:text-dark-muted">Conversas pausadas/travadas</p>
         </div>
       </div>
 
-      <!-- 2. Recent Leads Table -->
-      <div class="bg-[#121212] border border-[#1F1F1F] rounded-2xl overflow-hidden shadow-xl">
+      <!-- Recent Leads Table -->
+      <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-card">
         <!-- Table Header -->
-        <div class="p-6 border-b border-[#1F1F1F] flex justify-between items-center bg-[#151515]">
+        <div class="px-6 py-5 border-b border-gray-100 dark:border-dark-border flex justify-between items-center">
           <div class="flex items-center gap-3">
-             <div class="p-2 bg-[#00E096]/10 rounded-lg text-[#00E096]">
+             <div class="p-2 bg-primary-50 dark:bg-primary-500/10 rounded-lg text-primary-500">
                <Phone class="w-5 h-5" />
              </div>
              <div>
-               <h3 class="text-lg font-bold text-white">Clientes do WhatsApp</h3>
-               <p class="text-xs text-[#9CA3AF]">Listagem recente de contatos</p>
+               <h3 class="text-base font-semibold text-gray-900 dark:text-white">Clientes do WhatsApp</h3>
+               <p class="text-xs text-gray-400 dark:text-dark-muted">Listagem recente de contatos</p>
              </div>
           </div>
           
-          <div class="flex items-center gap-3">
-            <span class="bg-[#2A2A2A] text-white text-xs font-bold px-3 py-1.5 rounded-full border border-[#333]">
-              {{ leads.length }} clientes
+          <div class="flex items-center gap-2">
+            <span class="text-gray-500 dark:text-dark-muted text-xs font-medium px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-dark-card border border-gray-100 dark:border-dark-border">
+              {{ filteredLeads.length }} clientes
             </span>
-            <button class="flex items-center gap-2 text-xs font-bold text-[#9CA3AF] hover:text-white px-3 py-1.5 rounded-lg hover:bg-[#2A2A2A] transition-colors border border-transparent hover:border-[#333]">
-              <Filter class="w-4 h-4" /> Filter
+
+            <!-- Phone Blur Toggle -->
+            <button 
+              @click="phoneBlurred = !phoneBlurred"
+              :class="[
+                'flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors border',
+                phoneBlurred
+                  ? 'text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-card border-gray-100 dark:border-dark-border'
+                  : 'text-primary-600 bg-primary-50 dark:bg-primary-500/10 border-primary-200 dark:border-primary-500/20'
+              ]"
+              :title="phoneBlurred ? 'Mostrar telefones' : 'Ocultar telefones'"
+            >
+              <EyeOff v-if="phoneBlurred" class="w-3.5 h-3.5" />
+              <Eye v-else class="w-3.5 h-3.5" />
+              {{ phoneBlurred ? 'Mostrar' : 'Ocultar' }}
+            </button>
+
+            <!-- Clear Filters Button -->
+            <button 
+              v-if="hasActiveFilters"
+              @click="clearFilters"
+              class="flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+            >
+              <X class="w-3.5 h-3.5" /> Limpar
+            </button>
+
+            <button 
+              @click="showFilters = !showFilters"
+              :class="[
+                'flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors border',
+                showFilters || hasActiveFilters
+                  ? 'text-primary-600 bg-primary-50 dark:bg-primary-500/10 border-primary-200 dark:border-primary-500/20' 
+                  : 'text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-card border-gray-100 dark:border-dark-border'
+              ]"
+            >
+              <Filter class="w-3.5 h-3.5" /> Filtrar
             </button>
           </div>
         </div>
+
+        <!-- Filters Panel -->
+        <Transition name="slide">
+          <div v-if="showFilters" class="px-6 py-5 border-b border-gray-100 dark:border-dark-border bg-gray-50/80 dark:bg-dark-card/30">
+            <div class="grid grid-cols-2 gap-x-8 gap-y-4">
+              <!-- Row 1: Status + Qualificado -->
+              <div class="flex items-center gap-3">
+                <span class="text-[11px] font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wider w-20 flex-shrink-0">Status</span>
+                <div class="flex gap-1.5 bg-white dark:bg-dark-surface p-1 rounded-xl border border-gray-100 dark:border-dark-border">
+                  <button 
+                    v-for="opt in [{ value: 'all', label: 'Todos' }, { value: 'active', label: 'Ativo' }, { value: 'locked', label: 'Travado' }]" 
+                    :key="opt.value"
+                    @click="filterStatus = opt.value as any"
+                    :class="[
+                      'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all',
+                      filterStatus === opt.value 
+                        ? 'bg-primary-500 text-white shadow-sm' 
+                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-dark-card hover:text-gray-700 dark:hover:text-white'
+                    ]"
+                  >
+                    {{ opt.label }}
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <span class="text-[11px] font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wider w-20 flex-shrink-0">Qualificado</span>
+                <div class="flex gap-1.5 bg-white dark:bg-dark-surface p-1 rounded-xl border border-gray-100 dark:border-dark-border">
+                  <button 
+                    v-for="opt in [{ value: 'all', label: 'Todos' }, { value: 'yes', label: 'Sim' }, { value: 'no', label: 'Não' }]"
+                    :key="opt.value"
+                    @click="filterInterest = opt.value as any"
+                    :class="[
+                      'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all',
+                      filterInterest === opt.value 
+                        ? 'bg-primary-500 text-white shadow-sm' 
+                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-dark-card hover:text-gray-700 dark:hover:text-white'
+                    ]"
+                  >
+                    {{ opt.label }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Row 2: Produto + Data -->
+              <div class="flex items-center gap-3">
+                <span class="text-[11px] font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wider w-20 flex-shrink-0">Produto</span>
+                <div class="flex gap-1.5 bg-white dark:bg-dark-surface p-1 rounded-xl border border-gray-100 dark:border-dark-border">
+                  <button 
+                    v-for="opt in [{ value: 'all', label: 'Todos' }, { value: 'Lentes', label: 'Lentes' }, { value: 'Implante', label: 'Implante' }, { value: 'Clareamento', label: 'Clareamento' }]"
+                    :key="opt.value"
+                    @click="filterProduct = opt.value as any"
+                    :class="[
+                      'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all',
+                      filterProduct === opt.value 
+                        ? 'bg-primary-500 text-white shadow-sm' 
+                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-dark-card hover:text-gray-700 dark:hover:text-white'
+                    ]"
+                  >
+                    {{ opt.label }}
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <span class="text-[11px] font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wider w-20 flex-shrink-0">Período</span>
+                <div class="flex items-center gap-2">
+                  <input 
+                    v-model="filterDateFrom" 
+                    type="date" 
+                    class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-400"
+                  />
+                  <span class="text-[10px] text-gray-400">até</span>
+                  <input 
+                    v-model="filterDateTo" 
+                    type="date" 
+                    class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-400"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Transition>
 
         <!-- Table Content -->
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
             <thead>
-              <tr class="border-b border-[#1F1F1F] text-[#9CA3AF] text-xs uppercase tracking-wider bg-[#181818]">
-                <th class="p-4 font-semibold">Nome</th>
-                <th class="p-4 font-semibold">Telefone</th>
-                <th class="p-4 font-semibold">Interessado</th>
-                <th class="p-4 font-semibold">Produto</th>
-                <th class="p-4 font-semibold">Status</th>
-                <th class="p-4 font-semibold text-right">Ações</th>
+              <tr class="border-b border-gray-100 dark:border-dark-border text-gray-400 dark:text-dark-muted text-xs uppercase tracking-wider">
+                <th class="px-6 py-4 font-medium">Nome</th>
+                <th class="px-6 py-4 font-medium">Telefone</th>
+                <th class="px-6 py-4 font-medium">Interessado</th>
+                <th class="px-6 py-4 font-medium">Produto</th>
+                <th class="px-6 py-4 font-medium">Status</th>
+                <th class="px-6 py-4 font-medium text-right">Ações</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-[#1F1F1F]">
-              <tr v-for="lead in leads" :key="lead.id" class="group hover:bg-[#1A1A1A] transition-colors">
+            <tbody class="divide-y divide-gray-50 dark:divide-dark-border">
+              <tr v-for="lead in paginatedLeads" :key="lead.id" class="group hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors">
                 <!-- Nome -->
-                <td class="p-4">
+                <td class="px-6 py-4">
                   <div class="flex items-center gap-3">
-                    <div v-if="lead.media_url" class="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden border border-[#27272A] shadow-lg">
+                    <div v-if="lead.media_url" class="w-9 h-9 rounded-xl flex-shrink-0 overflow-hidden border border-gray-100 dark:border-dark-border">
                       <img :src="lead.media_url" :alt="lead.name || 'Avatar'" class="w-full h-full object-cover" />
                     </div>
-                    <div v-else class="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-xs font-bold text-white border border-gray-600 shadow-lg">
+                    <div v-else class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-500/10 flex items-center justify-center text-xs font-bold text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-500/20">
                       {{ lead.avatar }}
                     </div>
-                    <span class="font-medium text-white">{{ lead.name }}</span>
+                    <span class="font-medium text-gray-900 dark:text-white text-sm">{{ lead.name }}</span>
                   </div>
                 </td>
                 
                 <!-- Telefone -->
-                <td class="p-4">
-                  <div class="flex items-center gap-2 text-[#9CA3AF] text-sm">
-                    <Phone class="w-3 h-3" />
+                <td class="px-6 py-4">
+                  <span class="text-gray-400 dark:text-dark-muted text-sm font-mono" :class="{ 'blur-sm select-none': phoneBlurred }">
                     {{ lead.phone }}
-                  </div>
+                  </span>
                 </td>
 
                 <!-- Interessado -->
-                <td class="p-4">
-                  <span v-if="lead.interested" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#00E096]/10 text-[#00E096] border border-[#00E096]/20">
+                <td class="px-6 py-4">
+                  <span v-if="lead.interested" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                     Sim
                   </span>
-                  <span v-else class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-gray-500/10 text-gray-400 border border-gray-500/20">
+                  <span v-else class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-gray-50 dark:bg-gray-500/10 text-gray-500 dark:text-gray-400">
                     Não
                   </span>
                 </td>
 
                 <!-- Produto -->
-                <td class="p-4 text-sm text-[#9CA3AF]">
+                <td class="px-6 py-4 text-sm text-gray-400 dark:text-dark-muted">
                   {{ lead.product }}
                 </td>
 
-                <!-- Status (Crucial Logic) -->
-                <td class="p-4">
-                  <span v-if="lead.status === 'active'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-500 border border-green-500/20">
-                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                <!-- Status -->
+                <td class="px-6 py-4">
+                  <span v-if="lead.status === 'active'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     Ativo
                   </span>
-                  <span v-else-if="lead.status === 'locked'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-orange-500/10 text-orange-500 border border-orange-500/20">
+                  <span v-else-if="lead.status === 'locked'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-500">
                      <Lock class="w-3 h-3" />
                      Travado
                   </span>
                 </td>
 
                 <!-- Ações -->
-                <td class="p-4 text-right">
-                  <div class="flex items-center justify-end gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                <td class="px-6 py-4 text-right">
+                  <div class="flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
                     <button 
                       @click="openLeadDetails(lead.id)"
-                      class="p-1.5 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors" 
+                      class="p-2 text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10 rounded-lg transition-all" 
                       title="Ver Detalhes"
                     >
                       <Eye class="w-4 h-4" />
                     </button>
                     <button 
                       @click="openChat(lead.id)" 
-                      class="p-1.5 text-gray-400 hover:text-[#00E096] hover:bg-[#00E096]/10 rounded-lg transition-colors" 
+                      class="p-2 text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10 rounded-lg transition-all" 
                       title="Abrir Chat"
                     >
                       <MessageSquare class="w-4 h-4" />
-                    </button>
-                    <button class="p-1.5 text-gray-400 hover:text-orange-500 hover:bg-orange-500/10 rounded-lg transition-colors" title="Travar/Destravar">
-                      <Lock class="w-4 h-4" />
                     </button>
                   </div>
                 </td>
@@ -325,15 +473,53 @@ onMounted(() => {
         </div>
 
         <!-- Footer / Pagination -->
-        <div class="p-4 border-t border-[#1F1F1F] bg-[#151515] flex justify-between items-center">
-          <p class="text-xs text-[#9CA3AF]">Mostrando <span class="text-white font-bold">1-{{ leads.length }}</span> de {{ metrics.total }} clientes</p>
+        <div class="px-6 py-4 border-t border-gray-100 dark:border-dark-border flex justify-between items-center">
+          <p class="text-xs text-gray-400 dark:text-dark-muted">
+            Mostrando <span class="text-gray-700 dark:text-white font-medium">{{ (currentPage - 1) * itemsPerPage + 1 }}-{{ Math.min(currentPage * itemsPerPage, filteredLeads.length) }}</span> 
+            de {{ filteredLeads.length }} clientes
+          </p>
           
-          <div class="flex gap-2">
-            <button disabled class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#2A2A2A] text-gray-500 text-xs font-bold border border-[#333] opacity-50 cursor-not-allowed">
-              <ChevronLeft class="w-3 h-3" /> Anterior
+          <div class="flex items-center gap-2">
+            <button 
+              @click="goToPage(currentPage - 1)" 
+              :disabled="currentPage <= 1"
+              :class="[
+                'flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border',
+                currentPage <= 1 
+                  ? 'text-gray-300 dark:text-gray-600 border-gray-100 dark:border-dark-border cursor-not-allowed' 
+                  : 'text-gray-600 dark:text-gray-300 border-gray-200 dark:border-dark-border hover:bg-gray-50 dark:hover:bg-dark-card hover:border-gray-300'
+              ]"
+            >
+              <ChevronLeft class="w-3.5 h-3.5" /> Anterior
             </button>
-            <button disabled class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#2A2A2A] text-gray-500 text-xs font-bold border border-[#333] opacity-50 cursor-not-allowed">
-              Próxima <ChevronRight class="w-3 h-3" />
+            
+            <div class="flex gap-1">
+              <button 
+                v-for="page in totalPages" 
+                :key="page" 
+                @click="goToPage(page)"
+                :class="[
+                  'w-8 h-8 rounded-lg text-xs font-medium transition-all',
+                  page === currentPage 
+                    ? 'bg-primary-500 text-white shadow-sm' 
+                    : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-dark-card'
+                ]"
+              >
+                {{ page }}
+              </button>
+            </div>
+
+            <button 
+              @click="goToPage(currentPage + 1)" 
+              :disabled="currentPage >= totalPages"
+              :class="[
+                'flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border',
+                currentPage >= totalPages 
+                  ? 'text-gray-300 dark:text-gray-600 border-gray-100 dark:border-dark-border cursor-not-allowed' 
+                  : 'text-gray-600 dark:text-gray-300 border-gray-200 dark:border-dark-border hover:bg-gray-50 dark:hover:bg-dark-card hover:border-gray-300'
+              ]"
+            >
+              Próxima <ChevronRight class="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
@@ -341,7 +527,7 @@ onMounted(() => {
     </main>
   </div>
 
-  <!-- Lead Details Modal (Outside main container) -->
+  <!-- Lead Details Modal -->
   <LeadDetailsModal
     :model-value="showModal"
     @update:model-value="showModal = $event"
@@ -350,3 +536,22 @@ onMounted(() => {
     @save-notes="handleNotesUpdate"
   />
 </template>
+
+<style scoped>
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.2s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.slide-enter-to,
+.slide-leave-from {
+  opacity: 1;
+  max-height: 100px;
+}
+</style>

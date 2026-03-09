@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import { User, Phone, Calendar, Package, X } from 'lucide-vue-next'
+import { User, Phone, Calendar, Package, X, TrendingUp } from 'lucide-vue-next'
 import type { Cliente } from '@/types/crm'
 
 const props = defineProps<{
@@ -14,7 +14,6 @@ const emit = defineEmits<{
   (e: 'save-notes', id: string, notes: string): void
 }>()
 
-const supabase = useSupabaseClient()
 const localNotes = ref('')
 const localStatus = ref('')
 
@@ -29,7 +28,7 @@ watch(() => props.lead, (newLead) => {
 const statusOptions = [
   { label: 'Novo', value: 'novo', color: 'bg-blue-500' },
   { label: 'Em Contato', value: 'em_contato', color: 'bg-yellow-500' },
-  { label: 'Qualificado', value: 'qualificado', color: 'bg-purple-500' },
+  { label: 'Qualificado', value: 'qualificado', color: 'bg-primary-500' },
   { label: 'Convertido', value: 'convertido', color: 'bg-green-500' },
   { label: 'Perdido', value: 'perdido', color: 'bg-red-500' }
 ]
@@ -46,14 +45,6 @@ const handleStatusChange = async (event: Event) => {
   if (!props.lead) return
   localStatus.value = newStatus
   emit('update-status', props.lead.id, newStatus)
-  
-  // Auto-save to database
-  const { error } = await supabase
-    .from('clients')
-    .update({ estagiokanbam: newStatus })
-    .eq('id', props.lead.id)
-    
-  if (error) console.error('Error updating status:', error)
 }
 
 const handleSaveNotes = async () => {
@@ -62,19 +53,6 @@ const handleSaveNotes = async () => {
   const currentNotes = props.lead.metadata?.notes || ''
   if (localNotes.value !== currentNotes) {
     emit('save-notes', props.lead.id, localNotes.value)
-    
-    // Auto-save to database
-    const { error } = await supabase
-      .from('clients')
-      .update({ 
-        metadata: { 
-          ...props.lead.metadata, 
-          notes: localNotes.value 
-        } 
-      })
-      .eq('id', props.lead.id)
-      
-    if (error) console.error('Error saving notes:', error)
   }
 }
 
@@ -100,20 +78,20 @@ const formatDate = (dateString?: string) => {
         @click.self="close"
       >
         <!-- Backdrop -->
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+        <div class="absolute inset-0 bg-gray-900/40 dark:bg-black/80 backdrop-blur-sm"></div>
         
         <!-- Modal Card -->
-        <div class="relative bg-[#121212] border border-[#27272A] rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="relative bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-sm shadow-luxury max-w-2xl w-full max-h-[90vh] overflow-y-auto">
           
           <!-- Header -->
-          <div class="flex items-center justify-between p-6 border-b border-[#27272A] sticky top-0 bg-[#121212] z-10">
+          <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-dark-border sticky top-0 bg-white dark:bg-dark-surface z-10">
             <div class="flex items-center gap-3">
-              <User class="w-5 h-5 text-[#00E096]" />
-              <h2 class="text-xl font-bold text-white">Detalhes do Lead</h2>
+              <User class="w-5 h-5 text-primary-500" />
+              <h2 class="text-xl font-bold text-gray-900 dark:text-white">Detalhes do Paciente</h2>
             </div>
             <button 
               @click="close" 
-              class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all"
+              class="p-2 text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-sm transition-all"
             >
               <X class="w-5 h-5" />
             </button>
@@ -126,90 +104,90 @@ const formatDate = (dateString?: string) => {
             <div class="grid grid-cols-2 gap-6">
               
               <!-- Nome e Avatar -->
-              <div class="col-span-2 flex items-center gap-4 border-b border-[#27272A] pb-6 mb-2">
-                <div v-if="lead.media_url" class="w-16 h-16 rounded-full flex-shrink-0 overflow-hidden border border-[#27272A] shadow-lg">
+              <div class="col-span-2 flex items-center gap-4 border-b border-gray-200 dark:border-dark-border pb-6 mb-2">
+                <div v-if="lead.media_url" class="w-16 h-16 rounded-sm flex-shrink-0 overflow-hidden border border-gray-200 dark:border-dark-border shadow-sm">
                   <img :src="lead.media_url" :alt="lead.name || 'Avatar'" class="w-full h-full object-cover" />
                 </div>
-                <div v-else class="w-16 h-16 rounded-full bg-gradient-to-br from-[#00E096] to-[#00B87A] flex items-center justify-center text-black font-bold text-2xl flex-shrink-0 shadow-lg border border-transparent">
+                <div v-else class="w-16 h-16 rounded-sm bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-500 font-bold text-2xl flex-shrink-0 shadow-sm border border-transparent">
                   {{ (lead.name || 'D').charAt(0).toUpperCase() }}
                 </div>
                 <div class="space-y-1">
-                  <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Nome</span>
-                  <p class="text-2xl font-bold text-white">{{ lead.name || 'Desconhecido' }}</p>
+                  <span class="text-xs font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wide">Nome</span>
+                  <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ lead.name || 'Desconhecido' }}</p>
                 </div>
               </div>
 
               <!-- Telefone -->
               <div class="space-y-1">
-                <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Telefone</span>
-                <div class="flex items-center gap-2 text-lg text-white">
-                  <Phone class="w-4 h-4 text-[#00E096]" />
+                <span class="text-xs font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wide">Telefone</span>
+                <div class="flex items-center gap-2 text-lg text-gray-900 dark:text-white">
+                  <Phone class="w-4 h-4 text-primary-500" />
                   <span>{{ lead.remotejid }}</span>
                 </div>
               </div>
 
               <!-- Data de Cadastro -->
               <div class="space-y-1">
-                <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Cadastrado em</span>
-                <div class="flex items-center gap-2 text-white">
-                  <Calendar class="w-4 h-4 text-gray-400" />
-                  <span>{{ formatDate(lead.created_at) }}</span>
+                <span class="text-xs font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wide">Cadastrado em</span>
+                <div class="flex items-center gap-2 text-gray-900 dark:text-white">
+                  <Calendar class="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                  <span class="text-sm font-medium">{{ formatDate(lead.created_at) }}</span>
                 </div>
               </div>
 
               <!-- Interesse -->
               <div class="space-y-1">
-                <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Interessado</span>
+                <span class="text-xs font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wide">Avaliação</span>
                 <div>
                   <span 
                     v-if="lead.is_qualified" 
-                    class="inline-flex px-3 py-1 rounded-full text-xs font-bold bg-[#00E096]/10 text-[#00E096] border border-[#00E096]/20"
+                    class="inline-flex px-3 py-1 rounded-sm text-xs font-bold bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-500 border border-primary-200 dark:border-primary-500/20 shadow-sm"
                   >
-                    Sim
+                    Aprovada
                   </span>
                   <span 
                     v-else 
-                    class="inline-flex px-3 py-1 rounded-full text-xs font-bold bg-[#27272A] text-gray-400 border border-[#3F3F46]"
+                    class="inline-flex px-3 py-1 rounded-sm text-xs font-bold bg-gray-100 dark:bg-dark-bg text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-dark-border"
                   >
-                    Não
+                    Pendente
                   </span>
                 </div>
               </div>
 
               <!-- Vertical / Produto -->
               <div class="col-span-1 space-y-1">
-                <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Vertical / Produto</span>
-                <div class="flex items-center gap-2 text-white">
-                  <Package class="w-4 h-4 text-[#00E096]" />
-                  <span>{{ lead.vertical || 'Não informado' }}</span>
+                <span class="text-xs font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wide">Tratamento</span>
+                <div class="flex items-center gap-2 text-gray-900 dark:text-white">
+                  <Package class="w-4 h-4 text-primary-500" />
+                  <span class="text-sm font-medium">{{ lead.vertical || 'Não informado' }}</span>
                 </div>
               </div>
 
               <!-- Score -->
               <div class="col-span-1 space-y-1">
-                <span class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Score IA</span>
-                <div class="flex items-center gap-2 text-white">
+                <span class="text-xs font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wide">Score IA</span>
+                <div class="flex items-center gap-2 text-gray-900 dark:text-white">
                   <TrendingUp class="w-4 h-4 text-primary-500" />
-                  <span class="font-bold">{{ lead.score || 'N/A' }}</span>
+                  <span class="font-bold text-sm">{{ lead.score || 'A+' }}</span>
                 </div>
               </div>
 
             </div>
 
             <!-- Divider -->
-            <div class="h-px bg-[#27272A]"></div>
+            <div class="h-px bg-gray-200 dark:bg-dark-border"></div>
 
             <!-- Actions -->
             <div class="space-y-4">
               
               <!-- Status Selector -->
               <div class="space-y-2">
-                <label class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Status CRM</label>
+                <label class="text-xs font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wide">Status CRM</label>
                 <div class="relative">
                   <select
                     v-model="localStatus"
                     @change="handleStatusChange"
-                    class="w-full bg-[#050505] border border-[#27272A] text-white rounded-lg px-4 py-3 pl-8 pr-10 appearance-none focus:outline-none focus:ring-2 focus:ring-[#00E096]/50"
+                    class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-gray-900 dark:text-white rounded-sm px-4 py-3 pl-8 pr-10 appearance-none shadow-sm font-medium text-sm focus:outline-none focus:ring-1 focus:ring-primary-500"
                   >
                     <option v-for="opt in statusOptions" :key="opt.value" :value="opt.value">
                       {{ opt.label }}
@@ -223,13 +201,13 @@ const formatDate = (dateString?: string) => {
 
               <!-- Notes -->
               <div class="space-y-2">
-                <label class="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wide">Notas</label>
+                <label class="text-xs font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wide">Notas Clínicas</label>
                 <textarea
                   v-model="localNotes"
-                  placeholder="Adicione observações sobre este lead..."
+                  placeholder="Adicione observações sobre a anamnese ou avaliação deste paciente..."
                   rows="4"
                   @blur="handleSaveNotes"
-                  class="w-full bg-[#050505] border border-[#27272A] text-white placeholder-gray-500 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00E096]/50 resize-none"
+                  class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-sm px-4 py-3 focus:outline-none focus:ring-1 focus:ring-primary-500 resize-none text-sm shadow-sm"
                 ></textarea>
               </div>
 
@@ -237,9 +215,9 @@ const formatDate = (dateString?: string) => {
           </div>
 
           <!-- Footer -->
-          <div class="flex items-center justify-between px-6 py-4 border-t border-[#27272A] text-xs text-[#9CA3AF] bg-[#0A0A0A]">
-            <span>Follow-ups: {{ lead.metadata?.followups || 0 }} tentativas</span>
-            <span>Último: {{ formatDate(lead.metadata?.last_followup) }}</span>
+          <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-dark-border text-xs text-gray-500 dark:text-dark-muted bg-gray-50 dark:bg-dark-bg mt-2">
+            <span class="font-medium">Follow-ups: {{ lead.metadata?.followups || 0 }} tentativas</span>
+            <span class="font-medium">Último: {{ formatDate(lead.metadata?.last_followup) }}</span>
           </div>
 
         </div>
