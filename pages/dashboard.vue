@@ -168,19 +168,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-dark-bg text-gray-900 dark:text-dark-text font-sans transition-colors duration-300">
+  <div class="min-h-screen text-gray-900 dark:text-dark-text font-sans transition-colors duration-300">
     <Sidebar />
 
     <main :class="[mainMargin, 'p-10 transition-all duration-300']">
       <!-- Header -->
       <header class="flex justify-between items-center mb-10">
         <div>
-          <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Dashboard</h1>
-          <p class="text-gray-400 dark:text-dark-muted mt-1 text-sm">Visão geral da sua clínica.</p>
+          <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white font-serif">Dashboard</h1>
+          <p class="text-gray-400 dark:text-dark-muted mt-1 text-sm">Visão geral da sua imobiliária.</p>
         </div>
         
         <div class="flex items-center gap-4">
-          <div class="text-sm font-medium text-gray-400 dark:text-dark-muted bg-white dark:bg-dark-surface px-4 py-2 rounded-xl border border-gray-100 dark:border-dark-border">
+          <div class="text-sm font-medium text-gray-400 dark:text-dark-muted bg-white dark:bg-dark-surface px-4 py-2 rounded-sm border border-gray-100 dark:border-dark-border">
             {{ new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
           </div>
         </div>
@@ -189,68 +189,68 @@ onMounted(() => {
       <!-- Metrics Section -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
         <!-- Card 1: Total de Leads -->
-        <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 group">
+        <div class="bg-white/80 dark:bg-dark-surface/80 backdrop-blur-xl border border-gray-100 dark:border-dark-border p-6 rounded-sm shadow-card hover:shadow-card-hover hover:border-primary-500/30 transition-all duration-300 group">
           <div class="flex justify-between items-start mb-3">
             <div>
-              <p class="text-gray-400 dark:text-dark-muted text-xs uppercase tracking-wider font-semibold mb-2">Total de Leads</p>
+              <p class="text-gray-400 dark:text-dark-muted text-xs uppercase tracking-wider font-semibold mb-2">Contatos Totais</p>
               <h3 class="text-3xl font-bold text-gray-900 dark:text-white">{{ metrics.total }}</h3>
             </div>
-            <div class="p-2.5 bg-primary-50 dark:bg-primary-500/10 rounded-xl text-primary-500 group-hover:scale-110 transition-transform">
+            <div class="p-2.5 bg-primary-50 dark:bg-primary-500/10 rounded-sm text-primary-500 group-hover:scale-110 transition-transform">
               <Users class="w-5 h-5" />
             </div>
           </div>
-          <p class="text-xs text-gray-400 dark:text-dark-muted">Contatos no WhatsApp</p>
+          <p class="text-xs text-gray-400 dark:text-dark-muted">Clientes captados</p>
         </div>
 
-        <!-- Card 2: Leads Interessados -->
-        <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 group">
+        <!-- Card 2: Visitas Agendadas -->
+        <div class="bg-white/80 dark:bg-dark-surface/80 backdrop-blur-xl border border-gray-100 dark:border-dark-border p-6 rounded-sm shadow-card hover:shadow-card-hover hover:border-emerald-500/30 transition-all duration-300 group">
           <div class="flex justify-between items-start mb-3">
             <div>
-              <p class="text-gray-400 dark:text-dark-muted text-xs uppercase tracking-wider font-semibold mb-2">Interessados</p>
+              <p class="text-gray-400 dark:text-dark-muted text-xs uppercase tracking-wider font-semibold mb-2">Visitas Agendadas</p>
               <h3 class="text-3xl font-bold text-gray-900 dark:text-white">{{ metrics.interested }}</h3>
             </div>
-            <div class="p-2.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl text-emerald-500 group-hover:scale-110 transition-transform">
+            <div class="p-2.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-sm text-emerald-500 group-hover:scale-110 transition-transform">
               <TrendingUp class="w-5 h-5" />
             </div>
           </div>
-          <p class="text-xs text-gray-400 dark:text-dark-muted">Responderam positivamente</p>
+          <p class="text-xs text-gray-400 dark:text-dark-muted">Visitas aos imóveis pendentes</p>
         </div>
 
         <!-- Card 3: Novos (7 dias) -->
-        <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 group">
+        <div class="bg-white/80 dark:bg-dark-surface/80 backdrop-blur-xl border border-gray-100 dark:border-dark-border p-6 rounded-sm shadow-card hover:shadow-card-hover hover:border-blue-500/30 transition-all duration-300 group">
           <div class="flex justify-between items-start mb-3">
             <div>
               <p class="text-gray-400 dark:text-dark-muted text-xs uppercase tracking-wider font-semibold mb-2">Novos (7 dias)</p>
               <h3 class="text-3xl font-bold text-gray-900 dark:text-white">{{ metrics.newLeads }}</h3>
             </div>
-            <div class="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-xl text-blue-500 group-hover:scale-110 transition-transform">
+            <div class="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-sm text-blue-500 group-hover:scale-110 transition-transform">
               <Clock class="w-5 h-5" />
             </div>
           </div>
           <p class="text-xs text-gray-400 dark:text-dark-muted">Novos contatos esta semana</p>
         </div>
 
-        <!-- Card 4: Conversas Travadas -->
-        <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 group">
+        <!-- Card 4: Contratos de Aluguel -->
+        <div class="bg-white/80 dark:bg-dark-surface/80 backdrop-blur-xl border border-gray-100 dark:border-dark-border p-6 rounded-sm shadow-card hover:shadow-card-hover hover:border-amber-500/30 transition-all duration-300 group">
           <div class="flex justify-between items-start mb-3">
             <div>
-              <p class="text-gray-400 dark:text-dark-muted text-xs uppercase tracking-wider font-semibold mb-2">Travadas</p>
+              <p class="text-gray-400 dark:text-dark-muted text-xs uppercase tracking-wider font-semibold mb-2">Contratos (Mês)</p>
               <h3 class="text-3xl font-bold text-gray-900 dark:text-white">{{ metrics.locked }}</h3>
             </div>
-            <div class="p-2.5 bg-amber-50 dark:bg-amber-500/10 rounded-xl text-amber-500 group-hover:scale-110 transition-transform">
+            <div class="p-2.5 bg-amber-50 dark:bg-amber-500/10 rounded-sm text-amber-500 group-hover:scale-110 transition-transform">
               <AlertCircle class="w-5 h-5" />
             </div>
           </div>
-          <p class="text-xs text-gray-400 dark:text-dark-muted">Conversas pausadas/travadas</p>
+          <p class="text-xs text-gray-400 dark:text-dark-muted">Contratos de aluguel assinados</p>
         </div>
       </div>
 
       <!-- Recent Leads Table -->
-      <div class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl overflow-hidden shadow-card">
+      <div class="bg-white/80 dark:bg-dark-surface/80 backdrop-blur-xl border border-gray-100 dark:border-dark-border rounded-sm overflow-hidden shadow-card">
         <!-- Table Header -->
         <div class="px-6 py-5 border-b border-gray-100 dark:border-dark-border flex justify-between items-center">
           <div class="flex items-center gap-3">
-             <div class="p-2 bg-primary-50 dark:bg-primary-500/10 rounded-lg text-primary-500">
+             <div class="p-2 bg-primary-50 dark:bg-primary-500/10 rounded-sm text-primary-500">
                <Phone class="w-5 h-5" />
              </div>
              <div>
@@ -260,15 +260,14 @@ onMounted(() => {
           </div>
           
           <div class="flex items-center gap-2">
-            <span class="text-gray-500 dark:text-dark-muted text-xs font-medium px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-dark-card border border-gray-100 dark:border-dark-border">
+            <span class="text-gray-500 dark:text-dark-muted text-xs font-medium px-3 py-1.5 rounded-sm bg-gray-50 dark:bg-dark-card border border-gray-100 dark:border-dark-border">
               {{ filteredLeads.length }} clientes
             </span>
 
-            <!-- Phone Blur Toggle -->
             <button 
               @click="phoneBlurred = !phoneBlurred"
               :class="[
-                'flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors border',
+                'flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-sm transition-colors border',
                 phoneBlurred
                   ? 'text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-card border-gray-100 dark:border-dark-border'
                   : 'text-primary-600 bg-primary-50 dark:bg-primary-500/10 border-primary-200 dark:border-primary-500/20'
@@ -284,7 +283,7 @@ onMounted(() => {
             <button 
               v-if="hasActiveFilters"
               @click="clearFilters"
-              class="flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+              class="flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 px-3 py-1.5 rounded-sm hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
             >
               <X class="w-3.5 h-3.5" /> Limpar
             </button>
@@ -292,7 +291,7 @@ onMounted(() => {
             <button 
               @click="showFilters = !showFilters"
               :class="[
-                'flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors border',
+                'flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-sm transition-colors border',
                 showFilters || hasActiveFilters
                   ? 'text-primary-600 bg-primary-50 dark:bg-primary-500/10 border-primary-200 dark:border-primary-500/20' 
                   : 'text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-card border-gray-100 dark:border-dark-border'
@@ -310,13 +309,13 @@ onMounted(() => {
               <!-- Row 1: Status + Qualificado -->
               <div class="flex items-center gap-3">
                 <span class="text-[11px] font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wider w-20 flex-shrink-0">Status</span>
-                <div class="flex gap-1.5 bg-white dark:bg-dark-surface p-1 rounded-xl border border-gray-100 dark:border-dark-border">
+                <div class="flex gap-1.5 bg-white dark:bg-dark-surface p-1 rounded-sm border border-gray-100 dark:border-dark-border">
                   <button 
                     v-for="opt in [{ value: 'all', label: 'Todos' }, { value: 'active', label: 'Ativo' }, { value: 'locked', label: 'Travado' }]" 
                     :key="opt.value"
                     @click="filterStatus = opt.value as any"
                     :class="[
-                      'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all',
+                      'px-3 py-1.5 rounded-sm text-xs font-semibold transition-all',
                       filterStatus === opt.value 
                         ? 'bg-primary-500 text-white shadow-sm' 
                         : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-dark-card hover:text-gray-700 dark:hover:text-white'
@@ -329,13 +328,13 @@ onMounted(() => {
 
               <div class="flex items-center gap-3">
                 <span class="text-[11px] font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wider w-20 flex-shrink-0">Qualificado</span>
-                <div class="flex gap-1.5 bg-white dark:bg-dark-surface p-1 rounded-xl border border-gray-100 dark:border-dark-border">
+                <div class="flex gap-1.5 bg-white dark:bg-dark-surface p-1 rounded-sm border border-gray-100 dark:border-dark-border">
                   <button 
                     v-for="opt in [{ value: 'all', label: 'Todos' }, { value: 'yes', label: 'Sim' }, { value: 'no', label: 'Não' }]"
                     :key="opt.value"
                     @click="filterInterest = opt.value as any"
                     :class="[
-                      'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all',
+                      'px-3 py-1.5 rounded-sm text-xs font-semibold transition-all',
                       filterInterest === opt.value 
                         ? 'bg-primary-500 text-white shadow-sm' 
                         : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-dark-card hover:text-gray-700 dark:hover:text-white'
@@ -346,16 +345,15 @@ onMounted(() => {
                 </div>
               </div>
 
-              <!-- Row 2: Produto + Data -->
               <div class="flex items-center gap-3">
-                <span class="text-[11px] font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wider w-20 flex-shrink-0">Produto</span>
-                <div class="flex gap-1.5 bg-white dark:bg-dark-surface p-1 rounded-xl border border-gray-100 dark:border-dark-border">
+                <span class="text-[11px] font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wider w-20 flex-shrink-0">Interesse</span>
+                <div class="flex gap-1.5 bg-white dark:bg-dark-surface p-1 rounded-sm border border-gray-100 dark:border-dark-border">
                   <button 
-                    v-for="opt in [{ value: 'all', label: 'Todos' }, { value: 'Lentes', label: 'Lentes' }, { value: 'Implante', label: 'Implante' }, { value: 'Clareamento', label: 'Clareamento' }]"
+                    v-for="opt in [{ value: 'all', label: 'Todos' }, { value: 'Apartamento', label: 'Apartamento' }, { value: 'Casa', label: 'Casa' }, { value: 'Loteamento', label: 'Loteamento' }]"
                     :key="opt.value"
                     @click="filterProduct = opt.value as any"
                     :class="[
-                      'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all',
+                      'px-3 py-1.5 rounded-sm text-xs font-semibold transition-all',
                       filterProduct === opt.value 
                         ? 'bg-primary-500 text-white shadow-sm' 
                         : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-dark-card hover:text-gray-700 dark:hover:text-white'
@@ -372,13 +370,13 @@ onMounted(() => {
                   <input 
                     v-model="filterDateFrom" 
                     type="date" 
-                    class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-400"
+                    class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-sm px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-400"
                   />
                   <span class="text-[10px] text-gray-400">até</span>
                   <input 
                     v-model="filterDateTo" 
                     type="date" 
-                    class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-400"
+                    class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-sm px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-400"
                   />
                 </div>
               </div>
@@ -404,10 +402,10 @@ onMounted(() => {
                 <!-- Nome -->
                 <td class="px-6 py-4">
                   <div class="flex items-center gap-3">
-                    <div v-if="lead.media_url" class="w-9 h-9 rounded-xl flex-shrink-0 overflow-hidden border border-gray-100 dark:border-dark-border">
+                    <div v-if="lead.media_url" class="w-9 h-9 rounded-sm flex-shrink-0 overflow-hidden border border-gray-100 dark:border-dark-border">
                       <img :src="lead.media_url" :alt="lead.name || 'Avatar'" class="w-full h-full object-cover" />
                     </div>
-                    <div v-else class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-500/10 flex items-center justify-center text-xs font-bold text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-500/20">
+                    <div v-else class="w-9 h-9 rounded-sm bg-primary-50 dark:bg-primary-500/10 flex items-center justify-center text-xs font-bold text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-500/20">
                       {{ lead.avatar }}
                     </div>
                     <span class="font-medium text-gray-900 dark:text-white text-sm">{{ lead.name }}</span>
@@ -423,10 +421,10 @@ onMounted(() => {
 
                 <!-- Interessado -->
                 <td class="px-6 py-4">
-                  <span v-if="lead.interested" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                  <span v-if="lead.interested" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-xs font-medium bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                     Sim
                   </span>
-                  <span v-else class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-gray-50 dark:bg-gray-500/10 text-gray-500 dark:text-gray-400">
+                  <span v-else class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-xs font-medium bg-gray-50 dark:bg-gray-500/10 text-gray-500 dark:text-gray-400">
                     Não
                   </span>
                 </td>
@@ -438,11 +436,11 @@ onMounted(() => {
 
                 <!-- Status -->
                 <td class="px-6 py-4">
-                  <span v-if="lead.status === 'active'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                  <span v-if="lead.status === 'active'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-xs font-medium bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     Ativo
                   </span>
-                  <span v-else-if="lead.status === 'locked'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-500">
+                  <span v-else-if="lead.status === 'locked'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-xs font-medium bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-500">
                      <Lock class="w-3 h-3" />
                      Travado
                   </span>
@@ -453,14 +451,14 @@ onMounted(() => {
                   <div class="flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
                     <button 
                       @click="openLeadDetails(lead.id)"
-                      class="p-2 text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10 rounded-lg transition-all" 
+                      class="p-2 text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10 rounded-sm transition-all" 
                       title="Ver Detalhes"
                     >
                       <Eye class="w-4 h-4" />
                     </button>
                     <button 
                       @click="openChat(lead.id)" 
-                      class="p-2 text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10 rounded-lg transition-all" 
+                      class="p-2 text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10 rounded-sm transition-all" 
                       title="Abrir Chat"
                     >
                       <MessageSquare class="w-4 h-4" />

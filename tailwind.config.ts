@@ -14,36 +14,40 @@ export default <Partial<Config>>{
         extend: {
             fontFamily: {
                 sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                serif: ['Playfair Display', 'Georgia', 'serif'],
             },
             colors: {
                 primary: {
-                    DEFAULT: '#2563EB',
-                    50: '#EFF6FF',
-                    100: '#DBEAFE',
-                    200: '#BFDBFE',
-                    300: '#93C5FD',
-                    400: '#60A5FA',
-                    500: '#2563EB',
-                    600: '#1D4ED8',
-                    700: '#1E40AF',
-                    glow: '#2563EB30'
+                    DEFAULT: '#B4975A', // Champagne Bronze
+                    50: '#FDFCF6',
+                    100: '#FAF8EB',
+                    200: '#F2ECD1',
+                    300: '#EADBB1',
+                    400: '#CDBA89',
+                    500: '#B4975A',
+                    600: '#8A7340',
+                    700: '#61502C',
+                    glow: '#B4975A30'
                 },
                 dark: {
-                    bg: '#0B0F1A',
-                    surface: '#111827',
-                    card: '#1F2937',
-                    border: '#1F2937',
-                    text: '#F9FAFB',
+                    bg: '#0F1115', // Onyx
+                    surface: '#181A20',
+                    card: '#1F222A',
+                    border: '#2A2D35',
+                    text: '#F3F4F6', // Off-white
                     muted: '#9CA3AF'
+                },
+                accent: {
+                    DEFAULT: '#E5CC98', // Sand
                 }
             },
             boxShadow: {
-                'luxury': '0 10px 30px -5px rgba(37, 99, 235, 0.15)',
-                'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
-                'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+                'luxury': '0 10px 30px -5px rgba(212, 175, 55, 0.15)',
+                'card': '0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.2)',
+                'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2)',
             },
             borderRadius: {
-                'card': '12px',
+                'card': '2px', // Sharper geometry
             }
         }
     }

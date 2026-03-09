@@ -6,11 +6,11 @@ import {
 
 const { mainMargin } = useSidebarState()
 
-// Doctors
+// Brokers (Corretores)
 const doctors = [
-  { id: 'dr1', name: 'Dr. Ricardo Mendes', color: 'bg-blue-500', light: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-500/20' },
-  { id: 'dr2', name: 'Dra. Camila Ferreira', color: 'bg-emerald-500', light: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/20' },
-  { id: 'dr3', name: 'Dr. André Bastos', color: 'bg-violet-500', light: 'bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-500/20' },
+  { id: 'dr1', name: 'Ricardo Mendes', color: 'bg-blue-500', light: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-500/20' },
+  { id: 'dr2', name: 'Camila Ferreira', color: 'bg-emerald-500', light: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/20' },
+  { id: 'dr3', name: 'André Bastos', color: 'bg-violet-500', light: 'bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-500/20' },
 ]
 
 // State
@@ -70,30 +70,30 @@ const isToday = (date: Date) => {
 // Mock appointments (recurring weekly pattern based on day-of-week)
 const mockAppointments = [
   // Monday
-  { day: 1, hour: '09:00', duration: 1, doctor: 'dr1', patient: 'Isabella Rezende', procedure: 'Avaliação Lentes' },
-  { day: 1, hour: '10:00', duration: 1, doctor: 'dr2', patient: 'Ana Clara Moreira', procedure: 'Clareamento' },
-  { day: 1, hour: '14:00', duration: 2, doctor: 'dr1', patient: 'Carlos Albuquerque', procedure: 'Protocolo — Planej.' },
-  { day: 1, hour: '15:00', duration: 1, doctor: 'dr3', patient: 'Roberto Junqueira', procedure: 'Emergência Implante' },
+  { day: 1, hour: '09:00', duration: 1, doctor: 'dr1', patient: 'Isabella Rezende', procedure: 'Visita — Apt. Jardins' },
+  { day: 1, hour: '10:00', duration: 1, doctor: 'dr2', patient: 'Ana Clara Moreira', procedure: 'Reunião Proposta' },
+  { day: 1, hour: '14:00', duration: 2, doctor: 'dr1', patient: 'Carlos Albuquerque', procedure: 'Vistoria — Casa Lago' },
+  { day: 1, hour: '15:00', duration: 1, doctor: 'dr3', patient: 'Roberto Junqueira', procedure: 'Avaliação de Imóvel' },
   // Tuesday
-  { day: 2, hour: '08:00', duration: 1, doctor: 'dr2', patient: 'Mariana Costa', procedure: 'Avaliação Clareamento' },
-  { day: 2, hour: '10:00', duration: 2, doctor: 'dr1', patient: 'Dr. Fernando Mello', procedure: 'Lentes E-max — Prep' },
-  { day: 2, hour: '14:00', duration: 1, doctor: 'dr3', patient: 'Pedro Henrique Silva', procedure: 'Implante Consulta' },
-  { day: 2, hour: '16:00', duration: 1, doctor: 'dr2', patient: 'Juliana Ferreira', procedure: 'Profilaxia' },
+  { day: 2, hour: '08:00', duration: 1, doctor: 'dr2', patient: 'Mariana Costa', procedure: 'Visita — Cobertura' },
+  { day: 2, hour: '10:00', duration: 2, doctor: 'dr1', patient: 'Fernando Mello', procedure: 'Fechamento Contrato' },
+  { day: 2, hour: '14:00', duration: 1, doctor: 'dr3', patient: 'Pedro Henrique Silva', procedure: 'Visita — Loteamento' },
+  { day: 2, hour: '16:00', duration: 1, doctor: 'dr2', patient: 'Juliana Ferreira', procedure: 'Entrega de Chaves' },
   // Wednesday
-  { day: 3, hour: '09:00', duration: 2, doctor: 'dr1', patient: 'Carolina Almeida', procedure: 'Invisalign Moldagem' },
-  { day: 3, hour: '11:00', duration: 1, doctor: 'dr3', patient: 'Marcos Vinícius', procedure: 'Avaliação Protocolo' },
-  { day: 3, hour: '14:00', duration: 1, doctor: 'dr2', patient: 'Patrícia Gomes', procedure: 'Retorno Clareamento' },
-  { day: 3, hour: '15:00', duration: 1, doctor: 'dr1', patient: 'Ricardo Santos', procedure: 'Lentes — Cimentação' },
+  { day: 3, hour: '09:00', duration: 2, doctor: 'dr1', patient: 'Carolina Almeida', procedure: 'Sessão de Fotos' },
+  { day: 3, hour: '11:00', duration: 1, doctor: 'dr3', patient: 'Marcos Vinícius', procedure: 'Reunião Investidor' },
+  { day: 3, hour: '14:00', duration: 1, doctor: 'dr2', patient: 'Patrícia Gomes', procedure: 'Visita — Loft' },
+  { day: 3, hour: '15:00', duration: 1, doctor: 'dr1', patient: 'Ricardo Santos', procedure: 'Assinatura Digital' },
   // Thursday
-  { day: 4, hour: '08:00', duration: 1, doctor: 'dr3', patient: 'Isabella Rezende', procedure: 'Retorno Avaliação' },
-  { day: 4, hour: '10:00', duration: 2, doctor: 'dr1', patient: 'Carlos Albuquerque', procedure: 'Protocolo — Cirurgia' },
-  { day: 4, hour: '14:00', duration: 1, doctor: 'dr2', patient: 'Ana Clara Moreira', procedure: 'Moldagem Clareamento' },
-  { day: 4, hour: '16:00', duration: 1, doctor: 'dr3', patient: 'Roberto Junqueira', procedure: 'Controle Implante' },
+  { day: 4, hour: '08:00', duration: 1, doctor: 'dr3', patient: 'Isabella Rezende', procedure: 'Visita Técnica' },
+  { day: 4, hour: '10:00', duration: 2, doctor: 'dr1', patient: 'Carlos Albuquerque', procedure: 'Escritura — Cartório' },
+  { day: 4, hour: '14:00', duration: 1, doctor: 'dr2', patient: 'Ana Clara Moreira', procedure: 'Reunião de Alocação' },
+  { day: 4, hour: '16:00', duration: 1, doctor: 'dr3', patient: 'Roberto Junqueira', procedure: 'Visita Final' },
   // Friday
-  { day: 5, hour: '09:00', duration: 1, doctor: 'dr2', patient: 'Mariana Costa', procedure: 'Clareamento Sessão 1' },
-  { day: 5, hour: '10:00', duration: 1, doctor: 'dr1', patient: 'Dr. Fernando Mello', procedure: 'Lentes E-max — Prova' },
-  { day: 5, hour: '14:00', duration: 2, doctor: 'dr3', patient: 'Pedro Henrique Silva', procedure: 'Implante — Cirurgia' },
-  { day: 5, hour: '15:00', duration: 1, doctor: 'dr2', patient: 'Juliana Ferreira', procedure: 'Limpeza Periodontal' },
+  { day: 5, hour: '09:00', duration: 1, doctor: 'dr2', patient: 'Mariana Costa', procedure: 'Vistoria de Saída' },
+  { day: 5, hour: '10:00', duration: 1, doctor: 'dr1', patient: 'Fernando Mello', procedure: 'Prospecção Local' },
+  { day: 5, hour: '14:00', duration: 2, doctor: 'dr3', patient: 'Pedro Henrique Silva', procedure: 'Tour de Imóveis' },
+  { day: 5, hour: '15:00', duration: 1, doctor: 'dr2', patient: 'Juliana Ferreira', procedure: 'Reunião Pós-Venda' },
 ]
 
 // Get appointments for a specific day/hour
@@ -131,7 +131,7 @@ const todayCount = computed(() => {
         </div>
 
         <div class="flex items-center gap-3">
-          <!-- Doctor Legend -->
+          <!-- Broker Legend -->
           <div class="flex items-center gap-3 mr-4">
             <div v-for="doc in doctors" :key="doc.id" class="flex items-center gap-1.5">
               <div :class="['w-2.5 h-2.5 rounded-full', doc.color]"></div>

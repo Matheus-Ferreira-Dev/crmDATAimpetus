@@ -73,12 +73,12 @@ onMounted(() => {
           </div>
           <div>
             <h1 class="text-xl font-bold tracking-tight flex items-center gap-3">
-              Pipeline de Leads
+              Pipeline de Negociações
               <span v-if="!loading" class="text-xs font-medium text-gray-500 dark:text-dark-muted px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-dark-card border border-gray-200 dark:border-dark-border">
-                {{ leads.length }} leads
+                {{ leads.length }} interessados
               </span>
             </h1>
-            <p class="text-gray-400 dark:text-dark-muted text-sm mt-0.5">Gerencie o fluxo de negociações.</p>
+            <p class="text-gray-400 dark:text-dark-muted text-sm mt-0.5">Gerencie os interessados nos imóveis.</p>
           </div>
         </div>
         

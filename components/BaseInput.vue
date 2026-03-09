@@ -10,7 +10,7 @@
         :value="modelValue"
         :placeholder="placeholder"
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-        class="w-full px-4 py-2.5 rounded-lg transition-all duration-300 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 dark:bg-dark-surface dark:border-dark-border dark:text-white dark:placeholder-dark-muted"
+        class="w-full px-4 py-2.5 rounded-sm transition-all duration-300 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 bg-transparent border border-gray-300 text-gray-900 placeholder-gray-400 dark:bg-transparent dark:border-dark-border dark:text-white dark:focus:border-primary-500 dark:placeholder-dark-muted"
       />
     </div>
   </div>

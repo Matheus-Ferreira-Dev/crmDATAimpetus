@@ -11,175 +11,175 @@ export const useMockData = () => {
     const mockLeads: Partial<Cliente>[] = [
         {
             id: 'mock-lead-1',
-            name: 'Isabella Rezende',
+            name: 'Helena Bittencourt',
             remotejid: '5511987654321',
             is_qualified: true,
             qualificado: true,
-            vertical: 'Lentes de Contato',
+            vertical: 'Mansão Em Alphaville',
             Ativado: true,
             status_crm: 'qualificando',
             estagiokanbam: 'qualificando',
             created_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
             metadata: {
-                notes: 'Paciente referiu ver anúncio no Instagram. Altamente interessada em transformar o sorriso para o casamento em 3 meses.'
+                notes: 'Buscando imóvel para a família em Alphaville. Altamente interessada em projeto contemporâneo.'
             }
         },
         {
             id: 'mock-lead-2',
-            name: 'Carlos Albuquerque',
+            name: 'Alexandre Diniz',
             remotejid: '5511976543210',
             is_qualified: true,
             qualificado: true,
-            vertical: 'Implante Protocolo',
+            vertical: 'Cobertura Duplex',
             Ativado: true,
             status_crm: 'agendado',
             estagiokanbam: 'agendado',
             created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
             metadata: {
-                notes: 'Busca reabilitação oral completa. Agendado para avaliação amanhã às 14h.'
+                notes: 'Procura cobertura com vista panorâmica. Agendou visita amanhã às 14h no Jardim Europa.'
             }
         },
         {
             id: 'mock-lead-3',
-            name: 'Carolina Almeida',
+            name: 'Isabelle Mello',
             remotejid: '5511965432109',
             is_qualified: false,
             qualificado: false,
-            vertical: 'Invisalign',
+            vertical: 'Apartamento Studio',
             Ativado: false,
             trava: true,
             status_crm: 'contato',
             estagiokanbam: 'contato',
             created_at: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
             metadata: {
-                notes: 'Aguardando aprovação de crédito para fechar o tratamento ortodôntico.'
+                notes: 'Aguardando aprovação de crédito para fechar o aluguel do flat no Itaim Bibi.'
             }
         },
         {
             id: 'mock-lead-4',
-            name: 'Dr. Fernando Mello',
+            name: 'Roberto Drummond',
             remotejid: '5511954321098',
             is_qualified: true,
             qualificado: true,
-            vertical: 'Lentes de Contato',
+            vertical: 'Casa de Condomínio',
             Ativado: true,
             status_crm: 'qualificado',
             estagiokanbam: 'qualificado',
             created_at: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString(),
             metadata: {
-                notes: 'Fechou 10 elementos superiores (Lentes em Emax). Pagamento via PIX.'
+                notes: 'Fechou o contrato de locação da casa em Tamboré. Pagamento adiantado.'
             }
         },
         {
             id: 'mock-lead-5',
-            name: 'Roberto Junqueira',
+            name: 'Henrique Toledo',
             remotejid: '5511943210987',
             is_qualified: false,
             qualificado: false,
-            vertical: 'Implante Unitário',
+            vertical: 'Sala Comercial',
             Ativado: true,
             status_crm: 'novo',
             estagiokanbam: 'novo',
             created_at: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
             metadata: {
-                notes: 'Perdeu um dente posterior jogando tênis. Quer agilidade.'
+                notes: 'Precisa de laje corporativa de alto padrão na Faria Lima para nova sede.'
             }
         },
         {
             id: 'mock-lead-6',
-            name: 'Mariana Costa',
+            name: 'Carolina Alcântara',
             remotejid: '5511932109876',
             is_qualified: false,
             qualificado: false,
-            vertical: 'Clareamento',
+            vertical: 'Loft',
             Ativado: true,
             status_crm: 'novo',
             estagiokanbam: 'novo',
             created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
             metadata: {
-                notes: 'Primeiro contato via Google Ads. Quer saber preço de clareamento.'
+                notes: 'Primeiro contato via site. Quer saber valores de locação na Vila Nova Conceição.'
             }
         },
         {
             id: 'mock-lead-7',
-            name: 'Pedro Henrique Silva',
+            name: 'Vicente Navarro',
             remotejid: '5511921098765',
             is_qualified: true,
             qualificado: true,
-            vertical: 'Implante Protocolo',
+            vertical: 'Cobertura Linear',
             Ativado: true,
             status_crm: 'Engajado',
             estagiokanbam: 'Engajado',
             created_at: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
             metadata: {
-                notes: 'Veio indicado por Carlos Albuquerque. Interessado em protocolo inferior.'
+                notes: 'Investidor interessado em imóvel de alto padrão para retrofit na região dos Jardins.'
             }
         }
     ]
 
     const mockChats = {
         'mock-lead-1': [
-            { id: '1', role: 'user', content: 'Olá, vi o anúncio no Instagram sobre as lentes de contato dental. Quanto custa?', created_at: new Date(Date.now() - 1000 * 60 * 45).toISOString() },
-            { id: '2', role: 'assistant', content: 'Olá, Isabella! 😊 Que bom falar com você! As Lentes de Contato Dental são realmente transformadoras. O investimento varia conforme a quantidade de dentes e o material escolhido (porcelana ou resina). Na nossa clínica, trabalhamos com Lentes em E-max, que é o padrão premium do mercado.\n\nPara te dar um valor exato, precisamos de uma avaliação com nosso especialista. Posso te perguntar: quantos dentes você gostaria de tratar?', created_at: new Date(Date.now() - 1000 * 60 * 42).toISOString() },
-            { id: '3', role: 'user', content: 'Queria fazer na frente inteira mesmo, os dentes de cima. Meu casamento é em 3 meses e acho meu sorriso amarelado e com espaços entre os dentes.', created_at: new Date(Date.now() - 1000 * 60 * 38).toISOString() },
-            { id: '4', role: 'assistant', content: 'Entendo perfeitamente, Isabella! Para noivas, temos um protocolo especial chamado "Smile Design Bridal" 💍\n\nO tratamento com 10 lentes superiores geralmente fica entre R$ 15.000 e R$ 22.000, dependendo do caso. E o melhor: em 3 meses dá tempo sim!\n\nNosso processo:\n1. Avaliação + Escaneamento Digital (1ª consulta)\n2. Mock-up Digital — você vê o resultado ANTES\n3. Preparação + Cimentação\n\nTemos horários disponíveis na quinta e sexta. Qual funciona melhor pra você?', created_at: new Date(Date.now() - 1000 * 60 * 35).toISOString() },
+            { id: '1', role: 'user', content: 'Olá, vi o anúncio no site sobre a mansão em Alphaville. Qual o valor?', created_at: new Date(Date.now() - 1000 * 60 * 45).toISOString() },
+            { id: '2', role: 'assistant', content: 'Olá, Helena! 😊 Que bom falar com você! Essa mansão é realmente um dos nossos imóveis mais exclusivos. O valor de venda está estabelecido em R$ 15.000.000. Você busca um projeto mais voltado ao clássico ou contemporâneo?', created_at: new Date(Date.now() - 1000 * 60 * 42).toISOString() },
+            { id: '3', role: 'user', content: 'Eu procuro algo bem contemporâneo, envidraçado e com bastante integração de espaços. Meu marido quer para daqui a 3 meses.', created_at: new Date(Date.now() - 1000 * 60 * 38).toISOString() },
+            { id: '4', role: 'assistant', content: 'Entendo perfeitamente, Helena! Essa propriedade atende exatamente a esse perfil: muita iluminação natural e conceito aberto 🏡\n\nTemos horários disponíveis nesta quinta e sexta-feira para uma visita in loco. Qual funciona melhor pra você e sua família?', created_at: new Date(Date.now() - 1000 * 60 * 35).toISOString() },
             { id: '5', role: 'user', content: 'Que legal! Quinta à tarde seria bom, depois das 15h.', created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString() },
-            { id: '6', role: 'assistant', content: 'Perfeito! Vou reservar o horário de quinta às 15h30 para sua Avaliação Premium com o Dr. Especialista. 📋\n\nA consulta dura cerca de 40 minutos e já saímos com o planejamento digital do seu novo sorriso.\n\nVou te enviar a confirmação com endereço e orientações. Qualquer dúvida antes da consulta, é só me chamar aqui! 😊', created_at: new Date(Date.now() - 1000 * 60 * 28).toISOString() },
+            { id: '6', role: 'assistant', content: 'Perfeito! Vou reservar sua visita técnica para a quinta às 15h30. 📋\n\nNossa corretora senior estará lá para mostrar todos os diferenciais de acabamento.\nVou enviar ao seu email as instruções de acesso ao condomínio. Qualquer dúvida, estou à disposição! 😊', created_at: new Date(Date.now() - 1000 * 60 * 28).toISOString() },
         ],
         'mock-lead-2': [
-            { id: '1', role: 'user', content: 'Bom dia, fazem implante protocolo? Qual o valor?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 26).toISOString() },
-            { id: '2', role: 'assistant', content: 'Bom dia, Carlos! Sim, somos referência em Implantodontia Avançada e Protocolos. 🦷\n\nO Protocolo é o tratamento mais completo para quem usa prótese total ou está perdendo muitos dentes. São implantes de titânio + uma prótese fixa parafusada.\n\nO investimento varia entre R$ 25.000 e R$ 45.000 por arcada, dependendo do material da prótese (acrílica ou em zircônia) e da quantidade de implantes necessários.\n\nVocê usa prótese removível atualmente? Tem sentido algum desconforto?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 25).toISOString() },
-            { id: '3', role: 'user', content: 'Uso prótese sim, é terrível. Machuca demais e fica solta na hora de comer. Já passei em 3 dentistas mas nenhum me passou confiança.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() },
-            { id: '4', role: 'assistant', content: 'Sinto muito que você esteja passando por isso, Carlos. Sei como é frustrante não se sentir seguro ao comer e sorrir. 😔\n\nO Protocolo Fixo vai devolver 100% da sua força mastigatória e conforto. Na nossa clínica, fazemos a tomografia computadorizada aqui mesmo e o planejamento é totalmente digital.\n\nTemos mais de 200 casos de protocolo realizados com sucesso. Posso te enviar alguns depoimentos de pacientes?\n\nE o mais importante: gostaria de marcar uma avaliação sem compromisso? Temos horários amanhã à tarde.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 23).toISOString() },
-            { id: '5', role: 'user', content: 'Pode sim, amanhã às 14h ficaria bom.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 22).toISOString() },
-            { id: '6', role: 'assistant', content: 'Agendado! ✅ Amanhã às 14h com o Dr. Especialista.\n\nEndereço: [endereço da clínica]\n\nTraga exames recentes se tiver (panorâmica, tomografia). Se não tiver, fazemos aqui mesmo.\n\nQualquer dúvida, estou por aqui. Até amanhã, Carlos! 🤝', created_at: new Date(Date.now() - 1000 * 60 * 60 * 21).toISOString() },
+            { id: '1', role: 'user', content: 'Bom dia, vi a cobertura duplex no Jardim Europa. O preço está na casa dos 20 milhões?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 26).toISOString() },
+            { id: '2', role: 'assistant', content: 'Bom dia, Alexandre! Exato, a cobertura está precificada em R$ 22.000.000. É um dos metros quadrados mais cobiçados de São Paulo. 🏙️\n\nA vista de 360 graus do skyline é incrível. O senhor busca o imóvel já mobiliado?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 25).toISOString() },
+            { id: '3', role: 'user', content: 'Queria que fosse mobiliado ou semi mobiliado. Tem armários pelo menos?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() },
+            { id: '4', role: 'assistant', content: 'Sim, todos os armários são da Ornare e os eletrodomésticos da linha premium da Gaggenau. 🤩\n\nTemos bastante procura por unidades prontas para morar nesse padrão. Gostaria de agendar uma visita amanhã à tarde sem compromisso?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 23).toISOString() },
+            { id: '5', role: 'user', content: 'Pode sim, amanhã às 14h ficaria bom pra mim.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 22).toISOString() },
+            { id: '6', role: 'assistant', content: 'Agendado! ✅ Amanhã às 14h.\n\nEnviarei os detalhes do endereço via WhatsApp e nosso time estará a postos. Até amanhã, Alexandre! 🤝', created_at: new Date(Date.now() - 1000 * 60 * 60 * 21).toISOString() },
         ],
         'mock-lead-3': [
-            { id: '1', role: 'user', content: 'Oi, boa noite! Quanto fica o Invisalign aí na clínica?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 50).toISOString() },
-            { id: '2', role: 'assistant', content: 'Boa noite, Carolina! 😊 O Invisalign é uma excelente escolha para alinhar os dentes de forma discreta.\n\nO valor depende da complexidade do caso:\n• Invisalign Express (casos leves): R$ 6.000 – R$ 9.000\n• Invisalign Comprehensive (casos moderados/complexos): R$ 12.000 – R$ 18.000\n\nVocê já fez alguma avaliação ortodôntica anteriormente? O que mais te incomoda no sorriso?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 49).toISOString() },
-            { id: '3', role: 'user', content: 'Tenho os dentes da frente meio tortos. Nunca usei aparelho. Tem como parcelar? Tá apertado financeiramente.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString() },
-            { id: '4', role: 'assistant', content: 'Entendo, Carolina! Sim, temos condições especiais de pagamento:\n\n💳 Parcelamos em até 24x no cartão\n📋 Também trabalhamos com financiamento via BV Financeira com aprovação em 24h\n\nPara casos mais simples como o seu (desalinhamento frontal), o Invisalign Express pode ser suficiente, e o investimento fica bem mais acessível.\n\nQuer agendar uma avaliação gratuita? Fazemos o escaneamento 3D e já te mostramos uma simulação do resultado final! Temos horário na terça ou quarta.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 47).toISOString() },
-            { id: '5', role: 'user', content: 'Hmm vou ver aqui com meu marido primeiro sobre a questão do crédito. Depois te falo.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 46).toISOString() },
-            { id: '6', role: 'assistant', content: 'Claro, Carolina! Fique à vontade. 🤗\n\nQuando decidir, é só me chamar aqui que reservo um horário pra você. A avaliação é sem compromisso e totalmente gratuita.\n\nAh, e se quiser já ir adiantando, posso te enviar o link da simulação de crédito pra vocês analisarem com calma. Quer que eu mande?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 45).toISOString() },
+            { id: '1', role: 'user', content: 'Oi, boa noite! O aluguel daquele studio no Itaim Bibi tá saindo quanto com condomínio?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 50).toISOString() },
+            { id: '2', role: 'assistant', content: 'Boa noite, Isabelle! 😊 O pacote completo do studio de luxo (aluguel + condomínio + IPTU) sai por R$ 8.500/mês.\n\nEle já vem 100% equipado e decorado por arquiteto renomado. O que você acha? Quando planeja mudar?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 49).toISOString() },
+            { id: '3', role: 'user', content: 'Queria para esse mês ainda. Tem margem para negociação ou algum tipo de seguro fiança que vocês parcelam?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString() },
+            { id: '4', role: 'assistant', content: 'Entendo, Isabelle! Sim, trabalhamos com as seguradoras tradicionais e conseguimos parcelamento do seguro fiança 💳\n\nPodemos fazer sua análise de crédito hoje mesmo. Tem um horário na agenda para visitar o prédio e fecharmos negócio?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 47).toISOString() },
+            { id: '5', role: 'user', content: 'Vou falar com o pessoal sobre a fiança primeiro e depois respondo.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 46).toISOString() },
+            { id: '6', role: 'assistant', content: 'Claro, fique à vontade. 🤗\n\nQuando quiser avançar com a documentação, eu te mando o link. Qualquer dúvida sobre a mobília ou as facilidades do prédio, é só chamar.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 45).toISOString() },
         ],
         'mock-lead-4': [
-            { id: '1', role: 'user', content: 'Dr. Fernando Mello aqui. Preciso de lentes de contato dental para 10 dentes superiores. Material E-max. Já tenho experiência com o procedimento.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 75).toISOString() },
-            { id: '2', role: 'assistant', content: 'Olá, Dr. Fernando! 🦷 Prazer em atendê-lo.\n\nPor já conhecer o procedimento, vou ser direto:\n\n• 10 Lentes E-max superiores\n• Investimento: R$ 19.500 (condição especial para profissionais da saúde)\n• Inclusos: Planejamento digital DSD + Mock-up + Provisórios\n• Prazo: 3 consultas em ~4 semanas\n\nTrabalharemos com o enceramento digital no Exocad. Alguma preferência de cor? Temos usado muito o BL2 e o A1 para um resultado natural.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 74).toISOString() },
-            { id: '3', role: 'user', content: 'Excelente. Prefiro A1, quero um resultado natural e não "tictac". Pagamento via PIX tem desconto?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 73).toISOString() },
-            { id: '4', role: 'assistant', content: 'Perfeita escolha, Dr. Fernando! A1 com acabamento natural é realmente o mais elegante. 👌\n\nPIX à vista: R$ 17.800 (desconto de ~9%)\n\nSe preferir, também fazemos:\n• 2x PIX: R$ 9.250 cada\n• 3x cartão: sem juros\n\nQuando podemos começar? Tenho disponibilidade na próxima semana para a primeira consulta (moldagem digital + fotos).', created_at: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString() },
-            { id: '5', role: 'user', content: 'Vou de PIX à vista. Pode ser segunda-feira que vem, período da manhã.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 71).toISOString() },
-            { id: '6', role: 'assistant', content: 'Fechado! ✅\n\n📅 Segunda-feira, 9h — 1ª consulta\n💰 PIX à vista: R$ 17.800\n🦷 10 Lentes E-max cor A1\n\nVou enviar o comprovante de agendamento e os dados PIX por aqui. Também envio o termo de consentimento para agilizar.\n\nSeja muito bem-vindo, Dr. Fernando! Será um prazer cuidar do seu sorriso. 🤝', created_at: new Date(Date.now() - 1000 * 60 * 60 * 70).toISOString() },
+            { id: '1', role: 'user', content: 'Roberto aqui. Eu confirmei a locação da casa em Tamboré. Quero pagar o primeiro ano adiantado.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 75).toISOString() },
+            { id: '2', role: 'assistant', content: 'Olá, Roberto! 🎉 Ótima notícia.\n\nCom o pagamento anual antecipado conseguimos isentar você de fiador e aplicar um excelente desconto no valor do pacote.\n\nVou emitir a minuta do contrato e os dados bancários. O pagamento será via PIX?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 74).toISOString() },
+            { id: '3', role: 'user', content: 'Exato. PIX. Que chique! Gostei da agilidade. Eu assino digitalmente?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 73).toISOString() },
+            { id: '4', role: 'assistant', content: 'Sim! Enviamos tudo via DocuSign, totalmente seguro e rápido. 💻\n\nO valor do repasse está sendo gerado agora e enviamos para sua validação em minutos.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString() },
+            { id: '5', role: 'user', content: 'Certo, fico no aguardo.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 71).toISOString() },
+            { id: '6', role: 'assistant', content: 'Fechado! ✅\n\nAs chaves serão entregues assim que o repasse for confirmado e as assinaturas entrarem.\n\nSeja muito bem vindo à sua nova residência, Roberto! Será um prazer ter você como nosso cliente. 🤝', created_at: new Date(Date.now() - 1000 * 60 * 60 * 70).toISOString() },
         ],
         'mock-lead-5': [
-            { id: '1', role: 'user', content: 'Boa tarde, perdi um dente jogando tênis. Vocês fazem implante?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString() },
-            { id: '2', role: 'assistant', content: 'Boa tarde, Roberto! Sim, fazemos implantes unitários. Lamento pelo ocorrido! 😬\n\nComo foi a perda? O dente saiu inteiro ou fraturou? E qual dente foi?\n\nEssas informações me ajudam a orientar melhor sobre o tratamento e urgência.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString() },
-            { id: '3', role: 'user', content: 'Foi o segundo pré-molar inferior esquerdo. Saiu inteiro com a raiz. Tá doendo bastante.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString() },
-            { id: '4', role: 'assistant', content: 'Entendo. Roberto, nesse caso é importante ser atendido o mais rápido possível. Se o alvéolo (local do dente) estiver limpo, existe a possibilidade de fazermos um implante imediato — na mesma sessão da avaliação!\n\nO implante unitário fica entre R$ 4.500 e R$ 7.000 (implante + coroa).\n\nConsigo encaixar uma emergência pra amanhã de manhã. Quer que eu reserve?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString() },
+            { id: '1', role: 'user', content: 'Vocês têm algo comercial na Faria Lima? Laje corporativa de alto padrão.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString() },
+            { id: '2', role: 'assistant', content: 'Boa tarde, Henrique! Sim, trabalhamos com as lajes mais disputadas do eixo Faria Lima.\n\nVocê precisa de quantos metros quadrados? Estamos falando de um espaço para quantas pessoas aproximadamente?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString() },
+            { id: '3', role: 'user', content: 'Pelo menos 400m². A gente quer um andar inteiro pra nossa holding. Tem que ser AAA.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString() },
+            { id: '4', role: 'assistant', content: 'Entendi o perfil do pedido, Marcos. Temos duas opções Triple A que acabaram de vagar nos edifícios Pátio Malzoni e B32.\n\nPara essas metragens comerciais, eu consigo montar uma apresentação detalhada com a planta. Gostaria de agendar uma reunião comercial para conversarmos melhor amanhã cedo?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString() },
         ],
         'mock-lead-6': [
-            { id: '1', role: 'user', content: 'Oi, vi o anúncio no Google sobre clareamento dental. Faz presencial mesmo? Qual o preço?', created_at: new Date(Date.now() - 1000 * 60 * 35).toISOString() },
-            { id: '2', role: 'assistant', content: 'Olá, Mariana! Sim, fazemos clareamento presencial aqui na clínica! 😁\n\nTemos duas modalidades:\n\n🏥 Clareamento em Consultório (laser): R$ 1.200 – R$ 1.800\n   → Resultado imediato em 1 sessão (~1h)\n\n🏠 Clareamento Caseiro (moldeira personalizada): R$ 800 – R$ 1.200\n   → Resultado gradual em 2–3 semanas\n\n💎 Combo (consultório + caseiro): R$ 1.600 – R$ 2.200\n   → Melhor resultado e mais duradouro\n\nAlguma preferência? Se quiser, posso agendar uma avaliação rápida para verificar a saúde dos seus dentes e recomendar o melhor protocolo pra você.', created_at: new Date(Date.now() - 1000 * 60 * 32).toISOString() },
-            { id: '3', role: 'user', content: 'O combo parece bom! Mas queria saber: dói muito? Tenho medo de sensibilidade.', created_at: new Date(Date.now() - 1000 * 60 * 28).toISOString() },
-            { id: '4', role: 'assistant', content: 'Ótima pergunta, Mariana! A sensibilidade é uma preocupação muito comum, mas fique tranquila. 🤗\n\nNós usamos gel dessensibilizante antes e depois do procedimento, o que reduz bastante qualquer desconforto. A grande maioria dos pacientes relata apenas uma sensibilidade leve que passa em 24–48h.\n\nAlém disso, na avaliação verificamos se há alguma cárie ou gengivite que precise ser tratada antes — isso garante um clareamento seguro e sem dor.\n\nQuer agendar? Tenho horário amanhã ou quinta. A avaliação inicial é gratuita! 📋', created_at: new Date(Date.now() - 1000 * 60 * 25).toISOString() },
+            { id: '1', role: 'user', content: 'Quero saber se compensa mais comprar ou alugar na Vila Nova Conceição.', created_at: new Date(Date.now() - 1000 * 60 * 35).toISOString() },
+            { id: '2', role: 'assistant', content: 'Olá, Carolina! A Vila Nova Conceição é nosso bairro número um no conceito de liquidez. 🌳\n\nTudo depende do seu horizonte de investimento. Um aluguel de alto padrão hoje na região varia de 12k a 35k. Já as vendas partem dos R$ 4 milhões.\n\nVocê pretende ficar na região por mais de cinco anos ou é algo de curto prazo?', created_at: new Date(Date.now() - 1000 * 60 * 32).toISOString() },
+            { id: '3', role: 'user', content: 'Vou morar pelo menos 2 anos lá, gosto do Ibirapuera. Então acho que locação talvez?', created_at: new Date(Date.now() - 1000 * 60 * 28).toISOString() },
+            { id: '4', role: 'assistant', content: 'Perfeito, Carolina! Para 2 anos o aluguel é frequentemente a escolha mais prudente financeiramente. 🎯\n\nTemos excelentes lofts e aptos próximos ao parque. Gostaria de agendar um call com um de nossos corretores para entender seu estilo de vida e encontrar algo especial?', created_at: new Date(Date.now() - 1000 * 60 * 25).toISOString() },
         ],
         'mock-lead-7': [
-            { id: '1', role: 'user', content: 'Oi, o Carlos Albuquerque me indicou vocês. Ele fez protocolo aí e disse que ficou ótimo. Quero fazer também, mas só na parte de baixo.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 13).toISOString() },
-            { id: '2', role: 'assistant', content: 'Olá, Pedro Henrique! Que bom receber sua mensagem! O Carlos é um paciente muito especial pra nós. 🤝\n\nProtocolo inferior é sim possível! Geralmente precisamos de 4 a 6 implantes na mandíbula, dependendo da anatomia óssea.\n\nO investimento para o protocolo inferior fica entre R$ 25.000 e R$ 38.000, incluindo os implantes + prótese fixa.\n\nVocê usa prótese removível hoje ou ainda tem alguns dentes na parte de baixo?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString() },
-            { id: '3', role: 'user', content: 'Ainda tenho uns 4 dentes mas estão todos moles, o dentista falou que vou perder todos em breve. Quero resolver logo antes que caiam sozinhos.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 11).toISOString() },
-            { id: '4', role: 'assistant', content: 'Entendo a urgência, Pedro Henrique. Nesses casos é realmente melhor antecipar o tratamento. 💪\n\nO procedimento funciona assim:\n1. Extraímos os dentes comprometidos\n2. Instalamos os implantes no mesmo dia\n3. Colocamos uma prótese provisória fixa imediata\n4. Após 4–6 meses, instalamos a prótese definitiva\n\nOu seja, você não fica nenhum dia sem dentes! 🦷\n\nComo o Carlos te indicou, temos uma condição especial de indicação. Posso te passar os detalhes na avaliação.\n\nTemos horário na quarta ou sexta pra uma consulta completa com tomografia. Qual prefere?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 10).toISOString() },
-            { id: '5', role: 'user', content: 'Sexta seria melhor pra mim. Período da tarde, se possível.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 9).toISOString() },
-            { id: '6', role: 'assistant', content: 'Reservado! 📅 Sexta às 14h30 — Avaliação completa com tomografia.\n\nVou preparar tudo para que o Dr. já faça o planejamento digital no mesmo dia. Assim você já sai com uma previsão clara do tratamento, prazos e valores.\n\nDica: não precisa estar em jejum, mas evite café 1h antes (por causa da tomografia).\n\nQualquer dúvida, é só chamar! Até sexta, Pedro Henrique! 😊', created_at: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString() },
-        ]
+            { id: '1', role: 'user', content: 'Oi, tenho interesse nas coberturas antigas dos Jardins. Quero comprar, reformar e dar flip.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 13).toISOString() },
+            { id: '2', role: 'assistant', content: 'Olá, Vicente! Retrofit nos Jardins é uma de nossas especialidades de sourcing de imóveis. 🛠️\n\nTemos algumas unidades off-market nesse perfil que demandam grandes reformas mas têm ótimo retorno. Preços entre R$ 6.000.000 e R$ 12.000.000.\n\nVocê já atua nesse segmento imobiliário há bastante tempo?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString() },
+            { id: '3', role: 'user', content: 'Sim, invisto faz uns 8 anos no exterior e cheguei no Brasil agora. Estou atrás de oportunidades de 400m2 pra mais.', created_at: new Date(Date.now() - 1000 * 60 * 60 * 11).toISOString() },
+            { id: '4', role: 'assistant', content: 'Excelente background, Arthur. Bem-vindo de volta! 💪\n\nEu tenho exatamente o que você procura: uma cobertura linear de 510m² na Rua Oscar Freire. Extremamente rara.\n\nGostaria de visitar o imóvel para avaliar o potencial estrutural na sexta-feira à tarde?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 10).toISOString() },
+            { id: '5', role: 'user', content: 'Sexta-feira eu consigo. Umas 14h30?', created_at: new Date(Date.now() - 1000 * 60 * 60 * 9).toISOString() },
+            { id: '6', role: 'assistant', content: 'Fechado! 📅 Sexta às 14h30.\n\nVou pedir ao nosso consultor especializado em retrofit para lhe acompanhar.\n\nEnviaremos todas as instruções. Qualquer dúvida, é só nos chamar!', created_at: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString() },
+        ],
     }
 
     const mockSummaries: Record<string, string> = {
-        'mock-lead-1': '📋 **Resumo da Conversa — Isabella Rezende**\n\n• Interesse: Lentes de Contato Dental (10 elementos superiores)\n• Motivação: Casamento em 3 meses, deseja sorriso natural\n• Queixas: Dentes amarelados e espaçados\n• Valor apresentado: R$ 15.000 – R$ 22.000\n• Status: Consulta AGENDADA para quinta às 15h30\n• Temperatura: 🔥 Quente — alta intenção de fechamento\n• Próximo passo: Avaliação Premium + Mock-up Digital',
-        'mock-lead-2': '📋 **Resumo da Conversa — Carlos Albuquerque**\n\n• Interesse: Implante Protocolo (arcada completa)\n• Motivação: Prótese removível machuca e fica solta\n• Histórico: Já passou em 3 dentistas sem decisão\n• Valor apresentado: R$ 25.000 – R$ 45.000/arcada\n• Status: Consulta AGENDADA para amanhã às 14h\n• Temperatura: 🔥 Quente — paciente com dor\n• Próximo passo: Tomografia + plano de tratamento',
-        'mock-lead-3': '📋 **Resumo da Conversa — Carolina Almeida**\n\n• Interesse: Invisalign (desalinhamento frontal)\n• Motivação: Estética — nunca usou aparelho\n• Objeção: Financeira — precisa consultar marido sobre crédito\n• Valor apresentado: R$ 6.000 – R$ 18.000 (Express ou Comprehensive)\n• Status: AGUARDANDO retorno da paciente\n• Temperatura: ⚠️ Morno — interesse existe, barreira financeira\n• Próximo passo: Follow-up em 3 dias, enviar link de simulação de crédito',
-        'mock-lead-4': '📋 **Resumo da Conversa — Dr. Fernando Mello**\n\n• Interesse: 10 Lentes E-max superiores (cor A1)\n• Perfil: Profissional da saúde, conhece o procedimento\n• Pagamento: PIX à vista — R$ 17.800\n• Status: FECHADO ✅ — 1ª consulta segunda 9h\n• Temperatura: 🔥🔥 Quente — deal fechado\n• Próximo passo: Enviar dados PIX + termo de consentimento',
-        'mock-lead-5': '📋 **Resumo da Conversa — Roberto Junqueira**\n\n• Interesse: Implante Unitário (2º pré-molar inferior esquerdo)\n• Motivação: Perda traumática durante esporte\n• Situação: Urgência — dente avulsionado com dor\n• Valor apresentado: R$ 4.500 – R$ 7.000\n• Status: Aguardando confirmação para emergência\n• Temperatura: 🔥 Quente — urgência médica\n• Próximo passo: Avaliação de emergência + possível implante imediato',
-        'mock-lead-6': '📋 **Resumo da Conversa — Mariana Costa**\n\n• Interesse: Clareamento Dental (combo consultório + caseiro)\n• Motivação: Estética — primeiro contato via Google Ads\n• Preocupação: Sensibilidade pós-procedimento\n• Valor apresentado: R$ 1.600 – R$ 2.200 (combo)\n• Status: AGUARDANDO agendamento\n• Temperatura: ⚠️ Morno — interessada mas ainda não agendou\n• Próximo passo: Confirmar agendamento da avaliação gratuita',
-        'mock-lead-7': '📋 **Resumo da Conversa — Pedro Henrique Silva**\n\n• Interesse: Implante Protocolo Inferior\n• Indicação: Carlos Albuquerque (paciente existente)\n• Situação: 4 dentes remanescentes com mobilidade\n• Valor apresentado: R$ 25.000 – R$ 38.000\n• Status: Consulta AGENDADA para sexta às 14h30\n• Temperatura: 🔥 Quente — urgência + indicação confiável\n• Próximo passo: Tomografia + planejamento digital',
+        'mock-lead-1': '📋 **Resumo da Conversa — Helena Bittencourt**\n\n• Interesse: Mansão em Alphaville\n• Motivação: Buscando imóvel novo familiar para até 3 meses\n• Perfil do imóvel: Estilo contemporâneo e ensolarado\n• Valor do imóvel: R$ 15.000.000\n• Status: Visita técnica AGENDADA para quinta às 15h30\n• Temperatura: 🔥 Quente — urgência para a compra\n• Próximo passo: Apresentação da casa no local',
+        'mock-lead-2': '📋 **Resumo da Conversa — Alexandre Diniz**\n\n• Interesse: Cobertura Duplex no Jd. Europa\n• Motivação: Busca vista panorâmica e acabamento de altíssimo padrão\n• Demanda: Apartamento que tenha armários (Ornare)\n• Valor do imóvel: R$ 22.000.000\n• Status: Visita AGENDADA para amanhã às 14h\n• Temperatura: 🔥 Quente — compra imedia\n• Próximo passo: Visita do duplex e apresentação da documentação',
+        'mock-lead-3': '📋 **Resumo da Conversa — Isabelle Mello**\n\n• Interesse: Apartamento Studio (locação)\n• Locação mensal: R$ 8.500 no Itaim Bibi\n• Objeção: Detalhes de seguro fiança e fiador\n• Valor da operação: R$ 8.500 mensais + taxas\n• Status: AGUARDANDO retorno após falar com financeiro familiar\n• Temperatura: ⚠️ Morno — demanda real, mas trava de crédito existe\n• Próximo passo: Follow-up para oferecer ficha e análise hoje',
+        'mock-lead-4': '📋 **Resumo da Conversa — Roberto Drummond**\n\n• Interesse: Casa de Condomínio em Tamboré (locação)\n• Perfil: Locatário direto que adiantou o valor do 1º ano\n• Pagamento: Anual (via PIX) com isenção de fiador\n• Status: FECHADO ✅ — Emitindo contrato no DocuSign\n• Temperatura: 🔥🔥 Quente — Transação realizada\n• Próximo passo: Aguardar pagamento e protocolar entrega de chaves',
+        'mock-lead-5': '📋 **Resumo da Conversa — Henrique Toledo**\n\n• Interesse: Laje Corporativa na Faria Lima\n• Motivação: Nova sede corporativa Triple A\n• Situação: Pedido de no mínimo 400m²\n• Status: Aguardando verificação da planta e agendamento de call\n• Temperatura: 🔥 Quente — Operação de alta rentabilidade\n• Próximo passo: Reunião para apresentar Pátio Malzoni e B32',
+        'mock-lead-6': '📋 **Resumo da Conversa — Carolina Alcântara**\n\n• Interesse: Loft para locação perto do Ibirapuera\n• Dúvida: Comprar x Alugar na Vila Nova Conceição\n• Perspectiva: Ficar 2 anos na região\n• Status: Aguardando call do consultor ou agendamento de imovel.\n• Temperatura: ⚠️ Morno — Início de contato\n• Próximo passo: Conversar com corretor de locação',
+        'mock-lead-7': '📋 **Resumo da Conversa — Vicente Navarro**\n\n• Interesse: Compra de imóvel antigo linear para Retrofit (flip)\n• Background: Investidor do exterior, procurando grandes plantas (+400m²)\n• Soluções passadas: Rara cobertura de 510m² na Oscar Freire\n• Status: Visita AGENDADA p/ sexta 14h30\n• Temperatura: 🔥 Quente — Investidor pronto. Alta margem e rápida tomada de decisão\n• Próximo passo: Apresentar avaliação no local.',
     }
 
     const mockWeeklyMetrics: Record<string, any> = {
@@ -190,106 +190,95 @@ export const useMockData = () => {
     }
 
     const mockActivityLog = [
-        { id: '1', type: 'deal_closed', text: 'Dr. Fernando Mello fechou 10 Lentes E-max — R$ 17.800 (PIX à vista)', time: new Date(Date.now() - 1000 * 60 * 30).toISOString(), week: 'semana-1' },
-        { id: '2', type: 'meeting_scheduled', text: 'Isabella Rezende agendou Avaliação Premium — quinta 15h30', time: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), week: 'semana-1' },
-        { id: '3', type: 'lead_qualified', text: 'Carlos Albuquerque qualificado para Protocolo — alto interesse', time: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(), week: 'semana-1' },
-        { id: '4', type: 'ai_action', text: 'IA enviou follow-up para Carolina Almeida (Invisalign)', time: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(), week: 'semana-1' },
-        { id: '5', type: 'lead_new', text: 'Mariana Costa entrou via Google Ads — Clareamento Dental', time: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(), week: 'semana-1' },
-        { id: '6', type: 'meeting_scheduled', text: 'Pedro Henrique Silva agendou avaliação — sexta 14h30', time: new Date(Date.now() - 1000 * 60 * 60 * 18).toISOString(), week: 'semana-1' },
-        { id: '7', type: 'lead_qualified', text: 'Roberto Junqueira identificado como urgência — implante imediato', time: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), week: 'semana-1' },
-        { id: '8', type: 'deal_closed', text: 'Protocolo inferior finalizado para paciente indicado — R$ 32.000', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 8).toISOString(), week: 'semana-2' },
-        { id: '9', type: 'meeting_scheduled', text: '3 avaliações agendadas para clareamento via campanha Instagram', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 9).toISOString(), week: 'semana-2' },
-        { id: '10', type: 'ai_action', text: 'IA reativou 2 leads inativos com mensagem de follow-up', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10).toISOString(), week: 'semana-2' },
-        { id: '11', type: 'lead_new', text: '4 novos leads entraram via campanha Google Ads "Implantes"', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 11).toISOString(), week: 'semana-2' },
-        { id: '12', type: 'deal_closed', text: 'Lentes de contato 6 elementos para Dra. Patrícia — R$ 10.000', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 12).toISOString(), week: 'semana-2' },
-        { id: '13', type: 'lead_qualified', text: '4 leads qualificados na semana — recorde do mês', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 16).toISOString(), week: 'semana-3' },
-        { id: '14', type: 'meeting_scheduled', text: 'Semana com 4 agendamentos — taxa de show de 75%', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 17).toISOString(), week: 'semana-3' },
-        { id: '15', type: 'ai_action', text: 'IA identificou padrão: leads de Instagram convertem 40% mais rápido', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 18).toISOString(), week: 'semana-3' },
-        { id: '16', type: 'lead_new', text: '2 novos leads entraram — baixa captação na semana', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 22).toISOString(), week: 'semana-4' },
-        { id: '17', type: 'ai_action', text: 'IA sugeriu aumentar budget de ads — queda de 50% nos leads', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 23).toISOString(), week: 'semana-4' },
+        { id: '1', type: 'deal_closed', text: 'Roberto Drummond fechou a locação do imóvel Tamboré (anual)', time: new Date(Date.now() - 1000 * 60 * 30).toISOString(), week: 'semana-1' },
+        { id: '2', type: 'meeting_scheduled', text: 'Helena Bittencourt agendou visita: Mansão em Alphaville', time: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), week: 'semana-1' },
+        { id: '3', type: 'lead_qualified', text: 'Alexandre Diniz está qualificado para cobertura de 22M', time: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(), week: 'semana-1' },
+        { id: '4', type: 'ai_action', text: 'IA enviou follow-up de opções para locação na Vila Nova Conceição', time: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(), week: 'semana-1' },
+        { id: '5', type: 'lead_new', text: 'Carolina Alcântara buscou consultoria imobiliária no site', time: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(), week: 'semana-1' },
+        { id: '6', type: 'meeting_scheduled', text: 'Vicente Navarro agendou visita Oscar Freire para sexta 14h30', time: new Date(Date.now() - 1000 * 60 * 60 * 18).toISOString(), week: 'semana-1' },
+        { id: '7', type: 'lead_qualified', text: 'Henrique Toledo aprovou apresentação comercial da Faria Lima', time: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), week: 'semana-1' },
+        { id: '8', type: 'deal_closed', text: 'Locação finalizada de studio premium - Itaim Bibi', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 8).toISOString(), week: 'semana-2' },
+        { id: '9', type: 'meeting_scheduled', text: '3 novas visitas de coberturas em Higienópolis', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 9).toISOString(), week: 'semana-2' },
+        { id: '10', type: 'ai_action', text: 'IA reativou leads antigos para propostas no Anália Franco', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10).toISOString(), week: 'semana-2' },
+        { id: '11', type: 'lead_new', text: '4 leads na nova campanha off-market', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 11).toISOString(), week: 'semana-2' },
+        { id: '12', type: 'deal_closed', text: 'Venda ap. Moema Pássaros — R$ 4.000.000', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 12).toISOString(), week: 'semana-2' },
+        { id: '13', type: 'lead_qualified', text: '4 investidores aprovados na semana (renda atestada)', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 16).toISOString(), week: 'semana-3' },
+        { id: '14', type: 'meeting_scheduled', text: '4 grandes visitas agendadas nos Jardins', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 17).toISOString(), week: 'semana-3' },
+        { id: '15', type: 'ai_action', text: 'Análise aponta: perfil de retrofit engaja 8% mais nas manhãs de segunda', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 18).toISOString(), week: 'semana-3' },
+        { id: '16', type: 'lead_new', text: 'Mercado de aluguéis AAA continua crescendo (2 leads)', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 22).toISOString(), week: 'semana-4' },
+        { id: '17', type: 'ai_action', text: 'IA sugeriu destacar varanda gourmet nas segmentações', time: new Date(Date.now() - 1000 * 60 * 60 * 24 * 23).toISOString(), week: 'semana-4' },
     ]
 
     const mockWeeklyReports: Record<string, any> = {
         'semana-1': {
             title: 'Semana 24 Fev – 02 Mar',
-            resumo: 'Semana forte com 1 fechamento de alto ticket (Lentes E-max R$ 17.800). Pipeline aquecido com 3 qualificados. Destaque para leads de Instagram com alta conversão.',
+            resumo: 'Operamos um volume excepcional. Fechamento de alto ticket (Locação Tamboré - Pgmt Anual). Pipeline possui 3 contatos ultrarrápidos qualificados e alto volume em luxo.',
             destaques: [
-                '🏆 Fechamento Dr. Fernando Mello — R$ 17.800 PIX à vista',
-                '📈 3 leads qualificados na semana (+50% vs semana anterior)',
-                '📅 2 agendamentos confirmados para próxima semana',
+                '🏆 Fechamento Roberto Drummond — Pagamento pacote anual',
+                '📈 Vicente Navarro iniciando flip-invest — 500m² visitados.',
+                '📅 2 reuniões no Jardim Europa já avançando documentação',
             ],
             conselhos: [
-                'Isabella Rezende tem casamento em 3 meses — priorize o agendamento rápido para não perder timing',
-                'Carlos Albuquerque já passou em 3 dentistas. Na avaliação, foque em mostrar diferenciais (tecnologia, cases de sucesso)',
-                'Carolina Almeida tem barreira financeira — envie simulação de crédito BV Financeira em até 48h',
-                'Roberto Junqueira é urgência. Se não confirmar emergência até amanhã, ligar manualmente',
+                'Eduardo e Vicente precisam de velocidade documental: foquem nisso em caso de proposta',
+                'Fale sobre as opções B32 ou Pátio Malzoni c/ Henrique o mais breve',
             ],
             alertas: [
-                '⚠️ Carolina Almeida não respondeu há 2 dias — risco de esfriar',
-                '⚠️ Mariana Costa perguntou sobre sensibilidade mas não agendou — follow-up necessário',
+                '⚠️ Os investidores costumam mudar o foco se não tiver reposte ráp.',
             ],
         },
         'semana-2': {
             title: 'Semana 17 – 23 Fev',
-            resumo: 'Melhor semana do mês! 2 conversões com receita de R$ 42.000. Campanha "Implantes" no Google gerou 4 leads novos. Taxa de agendamento de 50% acima da média.',
+            resumo: 'Semana sólida nas transações de venda e locação AAA.',
             destaques: [
-                '🏆 2 fechamentos totalizando R$ 42.000 em receita',
-                '📈 Campanha Google "Implantes" gerou 4 leads quentes',
-                '📅 3 agendamentos na semana — todos confirmados',
+                '🏆 Venda confirmada nos r$ 4 Milhões (Moema)',
+                '📈 Campanha Off market gera bons frutos e retenção',
+                '📅 Várias avaliações em andamento',
             ],
             conselhos: [
-                'Manter orçamento da campanha "Implantes" — ROI positivo de 8x',
-                'Leads de implante convertem melhor quando atendidos em menos de 2h — monitorar SLA',
-                'Considerar criar campanha segmentada para "Lentes de Contato" — demanda crescente',
+                'Atacarem e engajarem a base fria que visualiza locação. Mudar funil',
             ],
             alertas: [
-                '⚠️ 1 lead não atendido em 24h — melhorar tempo de resposta',
+                '⚠️ Sem demoras nos retornos aos locatários interessados na VM ou Moema.',
             ],
         },
         'semana-3': {
             title: 'Semana 10 – 16 Fev',
-            resumo: 'Semana focada em qualificação com 4 leads qualificados (recorde). Porém, apenas 1 conversão efetivada. Necessário melhorar a ponte entre qualificação e fechamento.',
+            resumo: 'Semana muito boa sobre novas prospeccções nos Jardins.',
             destaques: [
-                '🏆 4 leads qualificados — recorde mensal',
-                '📊 IA identificou: Instagram converte 40% mais rápido que Google',
-                '📅 4 agendamentos com 75% de comparecimento',
+                '🏆 Captações de alto padrão subindo para nossa equipe interna',
+                '📊 Mídia social com 14.5% retorno sobre engajamentos nas varandas gourmet',
+                '📅 Boas visitas com executivos em flats',
             ],
             conselhos: [
-                'Muitos qualificados mas poucos fechamentos — reforçar script de fechamento na avaliação presencial',
-                'A taxa de show de 75% é boa, mas enviar lembrete 2h antes pode elevar para 85%+',
-                'Investir mais em Instagram Ads — dados mostram melhor performance vs Google neste período',
+                'Mostrem sempre vídeos detalhados para facilitar os leads',
             ],
             alertas: [
-                '⚠️ Gap entre qualificação e conversão — revisar processo de proposta',
+                '⚠️ Gap nas assinaturas de propostas — simplificar burocracia do lado CRM',
             ],
         },
         'semana-4': {
             title: 'Semana 03 – 09 Fev',
-            resumo: 'Semana fraca com apenas 2 novos leads e nenhuma conversão. Queda significativa pode estar relacionada a mudança no algoritmo de ads ou sazonalidade (Carnaval).',
+            resumo: 'Férias / Feriado - leads caindo e sem conversões na época.',
             destaques: [
-                '📊 IA sugeriu aumento de budget — captação caiu 50%',
-                '🔍 Análise indica sazonalidade como fator principal',
+                '📊 Baixo de ofertas concretas mas boas sondagens.',
+                '🔍 Investimento em anúncios mantido e melhorado.',
             ],
             conselhos: [
-                'URGENTE: Aumentar budget de ads em pelo menos 30% para compensar queda',
-                'Criar campanha específica pós-Carnaval com ofertas de "volta às consultas"',
-                'Reativar base de leads antigos com oferta especial — IA pode automatizar envio',
-                'Considerar parceria com influenciadores locais para gerar tráfego orgânico',
+                'Melhor esperar feriado porem câmara as conversações',
             ],
             alertas: [
-                '🚨 Nenhuma conversão na semana — atenção máxima',
-                '⚠️ Apenas 2 leads novos — volume abaixo do mínimo aceitável',
+                '🚨 Zero conversoes da base fria. Continuar ativando.',
             ],
         },
     }
 
     const mockChartData: Record<string, any> = {
         funnel: [
-            { label: 'Novos', value: 23, color: '#3B82F6' },
-            { label: 'Contato', value: 15, color: '#60A5FA' },
-            { label: 'Qualificados', value: 11, color: '#2563EB' },
-            { label: 'Agendados', value: 10, color: '#1D4ED8' },
-            { label: 'Convertidos', value: 4, color: '#1E40AF' },
+            { label: 'Novos', value: 23, color: '#D4AF37' },
+            { label: 'Contato', value: 15, color: '#C09D33' },
+            { label: 'Qualificados', value: 11, color: '#A18222' },
+            { label: 'Agendados', value: 10, color: '#755F16' },
+            { label: 'Convertidos', value: 4, color: '#4A3D0D' },
         ],
         weeklyTrend: [
             { week: 'Sem 1', leads: 4, conversoes: 0 },

@@ -1,7 +1,7 @@
 <template>
   <button 
     :class="[
-      'px-6 py-2.5 font-bold rounded-lg transition-all duration-300 flex items-center justify-center gap-2',
+      'px-6 py-2.5 font-bold rounded-sm transition-all duration-300 flex items-center justify-center gap-2',
       variantClasses[variant],
       { 'opacity-50 cursor-not-allowed': disabled }
     ]"
@@ -23,8 +23,8 @@ const props = withDefaults(defineProps<{
 })
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-primary-500 hover:bg-primary-600 text-black shadow-neon hover:shadow-[0_0_30px_rgba(0,224,150,0.6)]',
-  secondary: 'bg-white border border-gray-200 text-gray-900 hover:border-primary-500 dark:bg-dark-surface dark:border-dark-border dark:text-white',
+  primary: 'bg-primary-500 hover:bg-primary-600 text-white shadow-luxury hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] tracking-wide',
+  secondary: 'bg-transparent border border-gray-300 text-gray-900 hover:border-primary-500 dark:border-dark-border dark:text-white dark:hover:border-primary-500',
   ghost: 'bg-transparent text-gray-500 hover:text-black hover:bg-gray-100 dark:text-dark-muted dark:hover:text-white dark:hover:bg-white/5',
   danger: 'bg-red-500 hover:bg-red-600 text-white shadow-md'
 }

@@ -129,22 +129,25 @@ onUnmounted(() => {
         <div 
           v-for="lead in columnsData[col.key].value"
           :key="lead.id" 
-          class="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-xl p-4 cursor-grab active:cursor-grabbing hover:shadow-card-hover hover:border-gray-200 dark:hover:border-gray-600 transition-all duration-200 group flex flex-col gap-3"
+          class="bg-white/80 dark:bg-dark-surface/80 backdrop-blur-xl border border-gray-100/50 dark:border-dark-border/50 rounded-sm p-5 cursor-grab active:cursor-grabbing shadow-card hover:shadow-luxury hover:-translate-y-1 transition-all duration-300 group flex flex-col gap-4 relative overflow-hidden"
         >
+          <!-- Subtle top accent -->
+          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-400 to-primary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
           <!-- Header: Avatar + Name -->
           <div class="flex items-center gap-3">
-            <div v-if="lead.media_url" class="w-9 h-9 rounded-xl flex-shrink-0 overflow-hidden border border-gray-100 dark:border-dark-border">
+            <div v-if="lead.media_url" class="w-10 h-10 rounded-sm flex-shrink-0 overflow-hidden border border-gray-100 dark:border-dark-border">
               <img :src="lead.media_url" :alt="lead.name || 'Avatar'" class="w-full h-full object-cover" />
             </div>
-            <div v-else class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-500/10 flex items-center justify-center text-xs font-bold text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-500/20">
+            <div v-else class="w-10 h-10 rounded-sm bg-primary-50 dark:bg-primary-500/10 flex items-center justify-center text-sm font-serif font-bold text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-500/20">
               {{ (lead.name || 'D').charAt(0).toUpperCase() }}
             </div>
             <div class="flex-1 min-w-0">
-               <span class="font-semibold text-gray-900 dark:text-white text-sm block truncate">{{ lead.name || 'Desconhecido' }}</span>
+               <span class="font-serif font-semibold text-gray-900 dark:text-white text-base block truncate tracking-tight">{{ lead.name || 'Desconhecido' }}</span>
             </div>
             <button 
               @click="emit('view-details', lead)"
-              class="p-1.5 text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+              class="p-2 text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10 rounded-sm transition-all opacity-0 group-hover:opacity-100 bg-white/50 dark:bg-dark-bg/50 backdrop-blur-sm"
               title="Ver Detalhes"
             >
               <Eye class="w-4 h-4" />
@@ -152,9 +155,9 @@ onUnmounted(() => {
           </div>
 
           <!-- Phone -->
-          <div class="flex items-center gap-2 text-gray-400 dark:text-dark-muted text-xs bg-gray-50 dark:bg-dark-card p-2.5 rounded-lg">
-             <Phone class="w-3 h-3 flex-shrink-0" />
-             <span class="font-mono blur-sm select-none hover:blur-none transition-all">{{ lead.remotejid }}</span>
+          <div class="flex items-center gap-2 text-gray-500 dark:text-dark-muted text-xs bg-gray-50/80 dark:bg-dark-card/80 p-2.5 rounded-sm border border-gray-100/50 dark:border-dark-border/50">
+             <Phone class="w-3.5 h-3.5 flex-shrink-0 text-primary-400" />
+             <span class="font-mono tracking-wider blur-sm select-none hover:blur-none transition-all">{{ lead.remotejid }}</span>
           </div>
 
           <!-- Footer: Badges -->
@@ -182,8 +185,8 @@ onUnmounted(() => {
         </div>
 
         <!-- Empty State -->
-        <div v-if="columnsData[col.key].value.length === 0" class="flex-1 flex items-center justify-center border-2 border-dashed border-gray-100 dark:border-dark-border rounded-xl m-1 min-h-[100px]">
-          <span class="text-gray-300 dark:text-gray-600 text-xs font-medium">Vazio</span>
+        <div v-if="columnsData[col.key].value.length === 0" class="flex-1 flex items-center justify-center border border-dashed border-gray-200 dark:border-dark-border bg-gray-50/30 dark:bg-dark-bg/30 rounded-sm m-1 min-h-[120px]">
+          <span class="text-gray-400 dark:text-gray-500 text-xs font-medium uppercase tracking-wider">Vazio</span>
         </div>
       </VueDraggable>
     </div>
