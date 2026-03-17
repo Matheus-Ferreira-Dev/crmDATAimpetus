@@ -7,7 +7,7 @@ export const useMockData = () => {
         newLeads: 9,
         locked: 2
     }
-
+    
     const mockLeads: Partial<Cliente>[] = [
         {
             id: 'mock-lead-1',
