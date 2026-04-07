@@ -87,7 +87,7 @@ const formatDate = (dateString?: string) => {
           <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-dark-border sticky top-0 bg-white dark:bg-dark-surface z-10">
             <div class="flex items-center gap-3">
               <User class="w-5 h-5 text-primary-500" />
-              <h2 class="text-xl font-bold text-gray-900 dark:text-white">Detalhes do Paciente</h2>
+              <h2 class="text-xl font-bold text-gray-900 dark:text-white">Detalhes do Interessado</h2>
             </div>
             <button 
               @click="close" 
@@ -156,7 +156,7 @@ const formatDate = (dateString?: string) => {
 
               <!-- Vertical / Produto -->
               <div class="col-span-1 space-y-1">
-                <span class="text-xs font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wide">Tratamento</span>
+                <span class="text-xs font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wide">Interesse</span>
                 <div class="flex items-center gap-2 text-gray-900 dark:text-white">
                   <Package class="w-4 h-4 text-primary-500" />
                   <span class="text-sm font-medium">{{ lead.vertical || 'Não informado' }}</span>
@@ -201,10 +201,10 @@ const formatDate = (dateString?: string) => {
 
               <!-- Notes -->
               <div class="space-y-2">
-                <label class="text-xs font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wide">Notas Clínicas</label>
+                <label class="text-xs font-semibold text-gray-400 dark:text-dark-muted uppercase tracking-wide">Observações</label>
                 <textarea
                   v-model="localNotes"
-                  placeholder="Adicione observações sobre a anamnese ou avaliação deste paciente..."
+                  placeholder="Adicione observações sobre o perfil deste interessado..."
                   rows="4"
                   @blur="handleSaveNotes"
                   class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-sm px-4 py-3 focus:outline-none focus:ring-1 focus:ring-primary-500 resize-none text-sm shadow-sm"

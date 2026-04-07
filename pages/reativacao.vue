@@ -12,7 +12,7 @@ const { mainMargin } = useSidebarState()
 const activeTab = ref<'disparo' | 'followup' | 'historico'>('disparo')
 const csvFile = ref<File | null>(null)
 const csvFileName = ref('')
-const message = ref('Olá! 😊 Vi que você demonstrou interesse em nossos tratamentos. Temos novidades e condições especiais este mês! Gostaria de saber mais?')
+const message = ref('Olá, [Nome]! Tudo bem? Vi que você demonstrou interesse em nossas propriedades de alto padrão. Temos novos imóveis exclusivos que acabaram de entrar no portfólio. Gostaria de conhecer as novidades?')
 const selectedLeads = ref<string[]>([])
 const selectAll = ref(false)
 const sending = ref(false)
@@ -21,17 +21,17 @@ const sendComplete = ref(false)
 // Follow-up config
 const followupEnabled = ref(true)
 const followupDelay = ref('48')
-const followupMessage = ref('Oi! Passando para saber se conseguiu pensar sobre o tratamento. Temos horários disponíveis esta semana e condições especiais para agendamento. Posso te ajudar? 🦷')
+const followupMessage = ref('Oi! Passando para saber se conseguiu pensar sobre os imóveis que conversamos. Temos horários disponíveis esta semana para visitas presenciais. Posso te ajudar a encontrar o imóvel ideal? 🗝️')
 const followupCount = ref('3')
 
 // Mock inactive leads
 const inactiveLeads = ref([
-  { id: '1', name: 'Ana Clara Moreira', phone: '5511991234567', lastContact: '15 dias atrás', product: 'Lentes de Contato', status: 'sem_resposta' },
-  { id: '2', name: 'Dr. Paulo Ribeiro', phone: '5521998765432', lastContact: '22 dias atrás', product: 'Implante', status: 'esfriou' },
-  { id: '3', name: 'Juliana Ferreira', phone: '5531987654321', lastContact: '30 dias atrás', product: 'Clareamento', status: 'sem_resposta' },
-  { id: '4', name: 'Marcos Vinícius', phone: '5511976543210', lastContact: '18 dias atrás', product: 'Protocolo', status: 'esfriou' },
-  { id: '5', name: 'Patrícia Gomes', phone: '5521965432109', lastContact: '45 dias atrás', product: 'Invisalign', status: 'sem_resposta' },
-  { id: '6', name: 'Ricardo Santos', phone: '5511954321098', lastContact: '12 dias atrás', product: 'Lentes de Contato', status: 'esfriou' },
+  { id: '1', name: 'Ana Clara Moreira', phone: '5511991234567', lastContact: '15 dias atrás', product: 'Cobertura Duplex', status: 'sem_resposta' },
+  { id: '2', name: 'Dr. Paulo Ribeiro', phone: '5521998765432', lastContact: '22 dias atrás', product: 'Casa de Condomínio', status: 'esfriou' },
+  { id: '3', name: 'Juliana Ferreira', phone: '5531987654321', lastContact: '30 dias atrás', product: 'Apartamento Luxo', status: 'sem_resposta' },
+  { id: '4', name: 'Marcos Vinícius', phone: '5511976543210', lastContact: '18 dias atrás', product: 'Loteamento Exclusivo', status: 'esfriou' },
+  { id: '5', name: 'Patrícia Gomes', phone: '5521965432109', lastContact: '45 dias atrás', product: 'Mansão', status: 'sem_resposta' },
+  { id: '6', name: 'Ricardo Santos', phone: '5511954321098', lastContact: '12 dias atrás', product: 'Cobertura Duplex', status: 'esfriou' },
 ])
 
 // Mock history
@@ -98,7 +98,7 @@ function getStatusLabel(status: string) {
             <RefreshCw class="w-6 h-6" />
           </div>
           <div>
-            <h1 class="text-xl font-bold tracking-tight">Reativar Leads</h1>
+            <h1 class="text-xl font-bold tracking-tight">Reativar Interessados</h1>
             <p class="text-gray-400 dark:text-dark-muted text-sm mt-0.5">Disparos de reativação, follow-up e nutrição de base</p>
           </div>
         </div>
@@ -146,7 +146,7 @@ function getStatusLabel(status: string) {
             <div class="px-5 py-3 border-b border-gray-100 dark:border-dark-border flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <Users class="w-4 h-4 text-gray-400" />
-                <h3 class="text-sm font-bold text-gray-900 dark:text-white">Leads Inativos</h3>
+                <h3 class="text-sm font-bold text-gray-900 dark:text-white">Interessados Inativos</h3>
                 <span class="text-[10px] text-gray-400 bg-gray-100 dark:bg-dark-card px-2 py-0.5 rounded-full">{{ inactiveLeads.length }}</span>
               </div>
               <button @click="toggleSelectAll" class="text-[11px] font-semibold text-primary-500 hover:text-primary-600 transition-colors">

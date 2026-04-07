@@ -107,7 +107,7 @@ onMounted(() => {
             <div class="p-2 bg-primary-100 dark:bg-primary-900/40 rounded-xl">
               <User class="w-5 h-5 text-primary-600 dark:text-primary-500" />
             </div>
-            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Diretório de Pacientes</h2>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Diretório de Interessados</h2>
           </div>
           <div class="flex items-center gap-2">
             <!-- Phone Blur -->
@@ -176,7 +176,7 @@ onMounted(() => {
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Buscar paciente por nome ou telefone..."
+              placeholder="Buscar interessado por nome ou telefone..."
               class="w-full bg-white dark:bg-dark-surface border border-gray-300 dark:border-dark-border text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-xl pl-12 pr-4 py-3 text-sm flex-1 focus:outline-none focus:ring-1 focus:ring-primary-500 shadow-sm transition-all"
             />
           </div>
@@ -197,7 +197,7 @@ onMounted(() => {
 
           <!-- Empty State -->
           <div v-else-if="filteredContacts.length === 0" class="p-12 text-center">
-            <p class="text-gray-500 dark:text-dark-muted">Nenhum paciente encontrado</p>
+            <p class="text-gray-500 dark:text-dark-muted">Nenhum interessado encontrado</p>
           </div>
 
           <!-- Contact Rows -->
@@ -215,7 +215,7 @@ onMounted(() => {
                 <img :src="(contact as any).media_url" :alt="contact.name || 'Avatar'" class="w-full h-full object-cover" />
               </div>
               <div v-else class="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-500 flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-sm">
-                {{ (contact.name || 'P').charAt(0).toUpperCase() }}
+                {{ (contact.name || 'I').charAt(0).toUpperCase() }}
               </div>
 
               <!-- Info -->

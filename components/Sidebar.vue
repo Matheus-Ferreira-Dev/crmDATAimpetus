@@ -6,28 +6,33 @@ import {
   Users, 
   BarChart3, 
   LogOut,
-  Stethoscope,
+  Building,
   ChevronsLeft,
   ChevronsRight,
   RefreshCw,
-  CalendarDays
+  CalendarDays,
+  Globe
 } from 'lucide-vue-next'
 
 const router = useRouter()
 const { isCollapsed, toggleSidebar } = useSidebarState()
 const user = { user_metadata: { full_name: 'Usuário Demo' } }
 
-const navigation = [
+const navigation: any[] = [
   { name: 'PRINCIPAL', items: [
     { name: 'Dashboard', icon: LayoutDashboard, route: '/dashboard' },
-    { name: 'CRM / Kanban', icon: KanbanSquare, route: '/crm', badge: '12+' },
+    { name: 'Negociações', icon: KanbanSquare, route: '/crm', badge: '12+' },
     { name: 'Contatos', icon: Users, route: '/contatos' },
-    { name: 'Agenda', icon: CalendarDays, route: '/agenda' },
+    { name: 'Visitas', icon: CalendarDays, route: '/agenda' },
   ]},
   { name: 'GESTÃO', items: [
+    { name: 'Inventário', icon: Building, route: '/inventario' },
     { name: 'Conversas', icon: MessageSquare, route: '/chats' },
     { name: 'Relatórios', icon: BarChart3, route: '/relatorios' },
-    { name: 'Reativar Leads', icon: RefreshCw, route: '/reativacao' },
+    { name: 'Reativar Interessados', icon: RefreshCw, route: '/reativacao' },
+  ]},
+  { name: 'MARKETING', items: [
+    { name: 'Catálogo Público', icon: Globe, route: '/imoveis', external: true },
   ]}
 ]
 
@@ -39,19 +44,19 @@ const handleLogout = async () => {
 <template>
   <aside 
     :class="[
-      'h-screen bg-white dark:bg-dark-surface border-r border-gray-100 dark:border-dark-border flex flex-col fixed left-0 top-0 overflow-hidden z-50 sidebar-transition',
+      'h-screen bg-white/80 dark:bg-dark-bg/80 backdrop-blur-2xl border-r border-gray-100 dark:border-dark-border flex flex-col fixed left-0 top-0 overflow-hidden z-50 sidebar-transition',
       isCollapsed ? 'w-20' : 'w-72'
     ]"
   >
     <!-- Header / Logo -->
     <div class="h-[72px] flex items-center border-b border-gray-100 dark:border-dark-border" :class="isCollapsed ? 'px-4 justify-center' : 'px-6 justify-between'">
       <div class="flex items-center gap-3 group cursor-pointer" :class="isCollapsed ? 'justify-center' : ''">
-         <div class="w-10 h-10 rounded-xl bg-primary-500 flex items-center justify-center shadow-luxury sidebar-transition group-hover:scale-105 flex-shrink-0">
-            <Stethoscope class="w-5 h-5 text-white" />
+         <div class="w-10 h-10 rounded-sm bg-primary-500 flex items-center justify-center shadow-luxury sidebar-transition group-hover:scale-105 flex-shrink-0">
+            <Building class="w-5 h-5 text-white" />
          </div>
          <div v-if="!isCollapsed" class="sidebar-text-transition overflow-hidden">
-           <span class="text-gray-900 dark:text-white font-bold text-lg tracking-tight block whitespace-nowrap">Data Impetus</span>
-           <span class="text-[11px] text-gray-400 dark:text-dark-muted font-medium whitespace-nowrap">Clínica Odontológica</span>
+           <span class="text-gray-900 dark:text-white font-bold text-lg tracking-tight block whitespace-nowrap font-serif">Impetus Prime</span>
+           <span class="text-[11px] text-gray-400 dark:text-dark-muted font-medium whitespace-nowrap uppercase tracking-wider">Alto Padrão</span>
          </div>
       </div>
       <button 
@@ -80,11 +85,12 @@ const handleLogout = async () => {
             <NuxtLink 
               :to="item.route" 
               :class="[
-                'flex items-center rounded-xl text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 sidebar-transition group relative',
+                'flex items-center rounded-sm text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50/50 dark:hover:bg-white/5 sidebar-transition group relative border-l-2 border-transparent',
                 isCollapsed ? 'justify-center p-3' : 'gap-3 px-4 py-2.5'
               ]"
-              active-class="!text-primary-500 !bg-primary-50 dark:!bg-primary-500/10 !font-semibold"
+              active-class="!text-primary-500 !border-primary-500 !font-semibold bg-gray-50/20 dark:bg-white/5"
               :title="isCollapsed ? item.name : undefined"
+              :target="(item as any).external ? '_blank' : undefined"
             >
               <component 
                 :is="item.icon" 
@@ -121,12 +127,12 @@ const handleLogout = async () => {
     <div class="p-4 border-t border-gray-100 dark:border-dark-border">
       <div 
         :class="[
-          'flex items-center rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 sidebar-transition group',
+          'flex items-center rounded-sm hover:bg-gray-50 dark:hover:bg-white/5 sidebar-transition group',
           isCollapsed ? 'justify-center p-2' : 'gap-3 p-3'
         ]"
       >
         <!-- Avatar -->
-        <div class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-500/10 border border-primary-100 dark:border-primary-500/20 flex items-center justify-center text-primary-600 dark:text-primary-400 font-bold text-sm flex-shrink-0">
+        <div class="w-9 h-9 rounded-sm bg-primary-50 dark:bg-primary-500/10 border border-primary-100 dark:border-primary-500/20 flex items-center justify-center text-primary-600 dark:text-primary-400 font-bold text-sm flex-shrink-0">
           {{ user?.user_metadata?.full_name?.charAt(0) || 'U' }}
         </div>
         
@@ -138,7 +144,7 @@ const handleLogout = async () => {
             <p class="text-xs text-gray-400 dark:text-dark-muted">Admin</p>
           </div>
 
-          <button @click="handleLogout" class="text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 p-2 rounded-lg sidebar-transition" title="Sair">
+          <button @click="handleLogout" class="text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 p-2 rounded-sm sidebar-transition" title="Sair">
             <LogOut class="w-4 h-4" />
           </button>
         </template>

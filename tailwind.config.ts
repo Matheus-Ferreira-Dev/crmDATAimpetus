@@ -1,51 +1,55 @@
 import type { Config } from 'tailwindcss'
 
 export default <Partial<Config>>{
-    content: [
-        './components/**/*.{js,vue,ts}',
-        './layouts/**/*.vue',
-        './pages/**/*.vue',
-        './plugins/**/*.{js,ts}',
-        './app.vue',
-        './error.vue'
-    ],
-    darkMode: 'class',
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Manrope', 'system-ui', '-apple-system', 'sans-serif'],
-                mono: ['IBM Plex Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
-            },
-            colors: {
-                primary: {
-                    DEFAULT: '#0F766E',
-                    50: '#F0FDFA',
-                    100: '#CCFBF1',
-                    200: '#99F6E4',
-                    300: '#5EEAD4',
-                    400: '#2DD4BF',
-                    500: '#0F766E',
-                    600: '#0D5C56',
-                    700: '#134E4A',
-                    glow: '#0F766E1F'
-                },
-                dark: {
-                    bg: '#0F172A',
-                    surface: '#111827',
-                    card: '#1E293B',
-                    border: '#334155',
-                    text: '#E5E7EB',
-                    muted: '#94A3B8'
-                }
-            },
-            boxShadow: {
-                'luxury': '0 10px 30px -18px rgba(15, 118, 110, 0.45)',
-                'card': '0 1px 2px rgba(15, 23, 42, 0.06), 0 10px 30px -24px rgba(15, 23, 42, 0.25)',
-                'card-hover': '0 8px 24px -18px rgba(15, 23, 42, 0.2)',
-            },
-            borderRadius: {
-                'card': '16px',
-            }
+  content: [
+    './components/**/*.{js,vue,ts}',
+    './layouts/**/*.vue',
+    './pages/**/*.vue',
+    './plugins/**/*.{js,ts}',
+    './app.vue',
+    './error.vue'
+  ],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
+        mono: ['IBM Plex Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+      },
+      colors: {
+        primary: {
+          DEFAULT: '#B4975A',
+          50: '#FDFCF6',
+          100: '#FAF8EB',
+          200: '#F2ECD1',
+          300: '#EADBB1',
+          400: '#CDBA89',
+          500: '#B4975A',
+          600: '#8A7340',
+          700: '#61502C',
+          glow: '#B4975A30'
+        },
+        dark: {
+          bg: '#0F1115',
+          surface: '#181A20',
+          card: '#1F222A',
+          border: '#2A2D35',
+          text: '#F3F4F6',
+          muted: '#9CA3AF'
+        },
+        accent: {
+          DEFAULT: '#E5CC98',
         }
+      },
+      boxShadow: {
+        luxury: '0 10px 30px -5px rgba(212, 175, 55, 0.15)',
+        card: '0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.2)',
+        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2)',
+      },
+      borderRadius: {
+        card: '2px',
+      }
     }
+  }
 }

@@ -13,7 +13,7 @@ export interface Cliente {
     score: string | null;
     estagiokanbam: string; // default 'novo'
     estagiopergunta: string; // default 'nome'
-    vertical: string; // default 'dental'
+    vertical: string; // default 'imobiliaria'
     qualification_data: string | null;
     is_qualified: boolean; // default false
     meeting_scheduled_at: string | null;

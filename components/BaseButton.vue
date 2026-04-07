@@ -23,9 +23,9 @@ const props = withDefaults(defineProps<{
 })
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 shadow-card',
-  secondary: 'bg-white border border-slate-200 text-slate-900 hover:border-slate-300 hover:bg-slate-50 dark:bg-dark-surface dark:border-dark-border dark:text-white dark:hover:bg-dark-card',
-  ghost: 'bg-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-dark-muted dark:hover:text-white dark:hover:bg-white/5',
-  danger: 'bg-red-600 hover:bg-red-700 text-white shadow-card'
+  primary: 'bg-primary-500 hover:bg-primary-600 text-white shadow-luxury hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] tracking-wide',
+  secondary: 'bg-transparent border border-gray-300 text-gray-900 hover:border-primary-500 dark:border-dark-border dark:text-white dark:hover:border-primary-500',
+  ghost: 'bg-transparent text-gray-500 hover:text-black hover:bg-gray-100 dark:text-dark-muted dark:hover:text-white dark:hover:bg-white/5',
+  danger: 'bg-red-500 hover:bg-red-600 text-white shadow-md'
 }
 </script>
