@@ -13,37 +13,38 @@ export default <Partial<Config>>{
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                sans: ['Manrope', 'system-ui', '-apple-system', 'sans-serif'],
+                mono: ['IBM Plex Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
             },
             colors: {
                 primary: {
-                    DEFAULT: '#2563EB',
-                    50: '#EFF6FF',
-                    100: '#DBEAFE',
-                    200: '#BFDBFE',
-                    300: '#93C5FD',
-                    400: '#60A5FA',
-                    500: '#2563EB',
-                    600: '#1D4ED8',
-                    700: '#1E40AF',
-                    glow: '#2563EB30'
+                    DEFAULT: '#0F766E',
+                    50: '#F0FDFA',
+                    100: '#CCFBF1',
+                    200: '#99F6E4',
+                    300: '#5EEAD4',
+                    400: '#2DD4BF',
+                    500: '#0F766E',
+                    600: '#0D5C56',
+                    700: '#134E4A',
+                    glow: '#0F766E1F'
                 },
                 dark: {
-                    bg: '#0B0F1A',
+                    bg: '#0F172A',
                     surface: '#111827',
-                    card: '#1F2937',
-                    border: '#1F2937',
-                    text: '#F9FAFB',
-                    muted: '#9CA3AF'
+                    card: '#1E293B',
+                    border: '#334155',
+                    text: '#E5E7EB',
+                    muted: '#94A3B8'
                 }
             },
             boxShadow: {
-                'luxury': '0 10px 30px -5px rgba(37, 99, 235, 0.15)',
-                'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
-                'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+                'luxury': '0 10px 30px -18px rgba(15, 118, 110, 0.45)',
+                'card': '0 1px 2px rgba(15, 23, 42, 0.06), 0 10px 30px -24px rgba(15, 23, 42, 0.25)',
+                'card-hover': '0 8px 24px -18px rgba(15, 23, 42, 0.2)',
             },
             borderRadius: {
-                'card': '12px',
+                'card': '16px',
             }
         }
     }

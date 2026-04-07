@@ -1,8 +1,8 @@
 <template>
   <button 
     @click="toggleTheme" 
-    class="p-2 rounded-lg transition-colors duration-300 focus:outline-none"
-    :class="isDark ? 'bg-dark-card text-primary-400 hover:bg-dark-border' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+    class="flex h-10 w-10 items-center justify-center rounded-xl border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+    :class="isDark ? 'border-dark-border bg-dark-card text-slate-200 hover:bg-slate-700' : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'"
     aria-label="Toggle Theme"
   >
     <!-- Sun Icon (shown in dark mode → click to go light) -->

@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-1.5 w-full">
-    <label v-if="label" :for="id" class="block text-sm font-medium text-dark-muted">
+    <label v-if="label" :for="id" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
       {{ label }}
     </label>
     <div class="relative">
@@ -10,7 +10,7 @@
         :value="modelValue"
         :placeholder="placeholder"
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-        class="w-full px-4 py-2.5 rounded-lg transition-all duration-300 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 dark:bg-dark-surface dark:border-dark-border dark:text-white dark:placeholder-dark-muted"
+        class="w-full px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none focus:border-slate-300 focus:ring-4 focus:ring-slate-900/5 bg-white border border-slate-200 text-slate-900 placeholder-slate-400 dark:bg-dark-surface dark:border-dark-border dark:text-white dark:placeholder-dark-muted dark:focus:border-primary-400 dark:focus:ring-primary-500/10"
       />
     </div>
   </div>
